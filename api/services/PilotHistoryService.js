@@ -1,4 +1,4 @@
-var PilotHistoryController = {
+var PilotHistoryService = {
 
   add: function (line, historyType) {
     PilotHistory.create({
@@ -17,4 +17,4 @@ var PilotHistoryController = {
 
 };
 
-module.exports = PilotHistoryController;
+module.exports = PilotHistoryService;
