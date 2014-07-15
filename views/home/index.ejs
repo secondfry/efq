@@ -9,3 +9,7 @@
 </script>
 <%- partial('partials/block-main') %>
 <% } %>
+<% if (req.session.level > 0) { %>
+<%- partial('partials/block-queue') %>
+<%- partial('partials/block-fleet.ejs') %>
+<% } %>

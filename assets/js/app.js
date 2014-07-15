@@ -17,6 +17,8 @@
 
   socket.on('connect', function socketConnected() {
 
+    socket.get('/')
+
     // Listen for Comet messages from Sails
     socket.on('message', function messageReceived(message) {
 
@@ -31,12 +33,26 @@
     });
 
     socket.on('queue', function queueEvent(data) {
-      console.log(data);
       switch(data.action) {
         case 'join':
+          addToObject(js_queue, data.queueLine);
           addQueueLine(data.queueLine);
           break;
         case 'leave':
+          removeFromObject(js_queue, data);
+          $('#' + pilotNameToId(data.pilotName)).remove();
+          break;
+      }
+    });
+
+    socket.on('fleet', function queueEvent(data) {
+      switch(data.action) {
+        case 'join':
+          addToObject(js_fleet, data.fleetLine);
+          addFleetLine(data.fleetLine);
+          break;
+        case 'leave':
+          removeFromObject(js_fleet, data);
           $('#' + pilotNameToId(data.pilotName)).remove();
           break;
       }

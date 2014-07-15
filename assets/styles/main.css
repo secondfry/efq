@@ -1,6 +1,6 @@
 @font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 400; src: local('Ubuntu'), url(Ubuntu.woff) format('woff'); }
 @font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 700; src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(Ubuntu-Bold.woff) format('woff'); }
-html { font-family: 'Ubuntu', sans-serif; background: #222; color: #ddd; }
+html { font: 0.8em/1.231 'Ubuntu', sans-serif; background: #222; color: #ddd; }
 body { padding: 0 1em; }
 input[type=submit] { color: #222; background: #ddd; border: 1px solid #bbb; margin: 0.5em; padding: 0.1em 0.2em; }
 
@@ -8,14 +8,16 @@ input[type=submit] { color: #222; background: #ddd; border: 1px solid #bbb; marg
 #login-form { position: absolute; top: 0; right: 0; }
 
 #main { }
-#charname { font-weight: bold; }
 .link { cursor: pointer; text-decoration: underline; color: #66c; }
 .link:hover { text-decoration: none; }
 #fit-form { display: none; }
 #fit-wrapper { margin: 0.5em; background: #ddd; padding: 0.5em; }
 #fit { width: 100%; padding: 0; background: #ddd; color: #222; border: 0; }
-#queue th, #queue td { padding: 0.25em 0.5em; border: 1px #444 solid;}
+#fleet th, #fleet td, #queue th, #queue td { padding: 0.25em 0.5em; border: 1px #444 solid;}
+.addToWait, .addToFleet, .remove { font-size: 0.8em; color: #222; background: #ddd; border: 1px solid #bbb; margin: 0.25em; padding: 0.25em 0.5em; display: inline-block; }
+.pilotFit { display: none; }
 
 #footer { margin: 1em 0 0 0; border-top: 1px solid #ddd; }
 
-#queue-leave, .ship { display: none; }
+#charname, #shiptype { font-weight: bold; }
+#queue-leave, .ship, .pilotID { display: none; }

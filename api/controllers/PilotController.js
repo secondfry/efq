@@ -19,11 +19,11 @@ var PilotController = {
 
   add: function (req, res) {
     Pilot.create({
-      name: req.headers.eve_charname,
+      name: req.headers.eve_charname
     }).done(function(err, pilot) {
-      if (err) {
-        console.log(err)
-      }
+      if (err)
+        console.log(err);
+      res.send()
     });
   },
 
@@ -33,11 +33,14 @@ var PilotController = {
         console.log(err)
       } else {
         if (pilot == undefined) {
+          req.session.pilotName = req.headers.eve_charname
           PilotController.add(req, res)
+        } else {
+          req.session.pilotName = req.headers.eve_charname
+          res.send()
         }
       }
     });
-    req.session.pilot = req.headers.eve_charname
   },
 
   /**

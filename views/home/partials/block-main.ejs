@@ -4,7 +4,8 @@ typeof req.headers.eve_stationname == 'undefined' ?
   location = req.headers.eve_stationname;
 %>
 <p>Привет, <span id="charname"><%= req.headers.eve_charname %></span>!</p>
-<p>Ты находишься в <b><%= location %></b> на корабле <b><%= req.headers.eve_shiptypename %></b> :)</p>
+<p>Ты находишься в <b><%= location %></b> на корабле <span id="shiptype"><%= req.headers.eve_shiptypename %></span> :)</p>
+<p id="queue-position"></p>
 <form id="fit-form" action="javascript:void(0)">
   <label for="fit">Фит</label><br />
   <div id="fit-wrapper">
@@ -14,6 +15,3 @@ typeof req.headers.eve_stationname == 'undefined' ?
 </form>
 <p><span class="link" id="queue-join">Регистрация в очередь</span></p>
 <p><span class="link" id="queue-leave">Покинуть очередь</span></p>
-<% if (req.session.level > 0) { %>
-<%- partial('partials/block-fleet.ejs') %>
-<% } %>

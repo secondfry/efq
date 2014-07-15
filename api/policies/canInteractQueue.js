@@ -1,8 +1,8 @@
 module.exports = function canInteractQueue (req, res, next) {
   switch(req.target.action) {
-    case 'update':
-    case 'destroy':
-      if (req.body.name == req.session.name) {
+    case 'find':
+    case 'remove':
+      if ((typeof req.session.pilotName != "undefined" && req.body.pilotName == req.session.pilotName) || req.session.level > 0) {
         next()
       }
       break;

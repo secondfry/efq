@@ -10,6 +10,11 @@ module.exports = {
 
   attributes: {
 
+    pilotID: {
+      type: 'integer',
+      decimal: true,
+      required: true
+    },
     pilotName: {
       type: 'string',
       unique: true,
@@ -24,6 +29,10 @@ module.exports = {
       required: true
     },
     pilotLocation: {
+      type: 'string',
+      required: true
+    },
+    category: {
       type: 'string',
       required: true
     }

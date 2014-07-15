@@ -22,5 +22,8 @@ module.exports.policies = {
   },
   Admin: {
     '*': 'canInteractAdmin'
+  },
+  Fleet: {
+    '*': 'canInteractFleet'
   }
 };
