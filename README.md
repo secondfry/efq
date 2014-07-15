@@ -1,0 +1,2 @@
+# EVEFleetQueue
+### a Sails application

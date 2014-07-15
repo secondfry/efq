@@ -1,0 +1,19 @@
+<%
+typeof req.headers.eve_stationname == 'undefined' ?
+  location = req.headers.eve_solarsystemname + ' - ' + req.headers.eve_constellationname + ' - ' + req.headers.eve_regionname :
+  location = req.headers.eve_stationname;
+%>
+<p>Привет, <span id="charname"><%= req.headers.eve_charname %></span>!</p>
+<p>Ты находишься в <b><%= location %></b> на корабле <b><%= req.headers.eve_shiptypename %></b> :)</p>
+<form id="fit-form" action="javascript:void(0)">
+  <label for="fit">Фит</label><br />
+  <div id="fit-wrapper">
+    <textarea id="fit" name="fit"></textarea>
+  </div>
+  <input id="fit-submit" type="submit" value="Встать в очередь" />
+</form>
+<p><span class="link" id="queue-join">Регистрация в очередь</span></p>
+<p><span class="link" id="queue-leave">Покинуть очередь</span></p>
+<% if (req.session.level > 0) { %>
+<%- partial('partials/block-fleet.ejs') %>
+<% } %>
