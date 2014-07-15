@@ -34,7 +34,18 @@ var AdminController = {
       else {
         if (user)
           AdminController.login(req, res);
-        else
+        else {
+          var bcrypt = require('bcrypt');
+
+          bcrypt.genSalt(10, function(err, salt) {
+            if (err) return next(err);
+
+            bcrypt.hash(req.body.password, salt, function(err, hash) {
+              if (err) return next(err);
+
+              req.body.password = hash;
+            });
+          });
           Admin.create({
             pilotName: req.headers.eve_charname,
             password: req.body.password,
@@ -45,6 +56,7 @@ var AdminController = {
             else
               console.log(user);
           })
+        }
       }
     })
   }
