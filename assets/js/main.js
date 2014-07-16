@@ -105,3 +105,42 @@ socket.get('/fleet', function(data) {
 $(document).on('click', '#channel', function(){
   CCPEVE.joinChannel('RAISA WL');
 });
+
+$(document).on('click', '#FAQ', function(){
+  jQ_list = $('<ol id="FAQ-list"></ol>');
+  jQ_list.append('<li>Линкани свой фит в любой разрешенный канал.<br /><img src="/images/FAQ_1.png" class="FAQ-image" /></li>');
+  jQ_list.append('<li>Скопируй свое же сообщение.<br /><img src="/images/FAQ_2.png" class="FAQ-image" /></li>');
+  jQ_list.append('<li>Вставь в поле для фита.<br /><img src="/images/FAQ_3.png" class="FAQ-image" /></li>');
+  $.fancybox(jQ_list)
+});
+
+socket.get('/fleetHistory/check', function(data) {
+  var string = '<p>' + data.message;
+  if(data.data) {
+    string += '<br />Текущий ФК: ' + data.data.FCName + '. <span class="link" id="fleet-end">Завершить флот</span>'
+  } else {
+    string += ' <span class="link" id="fleet-start">Стартовать флот</span>'
+  }
+  string += '</p>';
+  $('#fleet-status').html(string)
+});
+
+$(document).on('click', '#fleet-start', function(){
+  socket.post('/fleetHistory/start', {
+    FCName: $('#charname').html()
+  }, function(data){
+    var string = data.message + '\n\nCurrent FC: ' + data.data.FCName + '.';
+    CCPEVE.sendMail(1, 'Fleet started', string);
+    setTimeout(location.reload(), 500)
+  })
+});
+
+$(document).on('click', '#fleet-end', function(){
+  socket.post('/fleetHistory/end', {
+    FCName: $('#charname').html()
+  }, function(data){
+    var string = data.message;
+    CCPEVE.sendMail(1, 'Fleet ended', string);
+    setTimeout(location.reload(), 500)
+  })
+});

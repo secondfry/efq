@@ -45,4 +45,5 @@ nbproject
 config/local.js
 
 # Other
-api/services/levelList.json
+config/levelList.json
+config/banList.json

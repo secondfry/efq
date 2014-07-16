@@ -20,5 +20,7 @@ button { color: #222; background: #ddd; border: 1px solid #bbb; }
 
 #footer { margin: 1em 0 0 0; border-top: 1px solid #ddd; }
 
+#FAQ-list { padding: 0 0 0 1.5em; margin: 0; }
+
 #charname, #shiptype { font-weight: bold; }
 #queue-leave, .ship, .pilotID { display: none; }

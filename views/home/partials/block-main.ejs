@@ -7,7 +7,7 @@ typeof req.headers.eve_stationname == 'undefined' ?
 <p>Ты находишься в <b><%= location %></b> на корабле <span id="shiptype"><%= req.headers.eve_shiptypename %></span> :)</p>
 <p id="queue-position"></p>
 <form id="fit-form" action="javascript:void(0)">
-  <label for="fit">Фит</label><br />
+  <label for="fit">Фит</label> <span class="link" id="FAQ">// а что делать-то?</span><br />
   <div id="fit-wrapper">
     <textarea id="fit" name="fit"></textarea>
   </div>

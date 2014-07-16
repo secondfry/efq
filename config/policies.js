@@ -13,7 +13,7 @@
 
 
 module.exports.policies = {
-  '*': 'checkSecret',
+  '*': ['checkBanList', 'checkSecret'],
   Capsuleer: {
     '*': 'canInteractPilot'
   },
@@ -24,6 +24,9 @@ module.exports.policies = {
     '*': 'canInteractAdmin'
   },
   Fleet: {
+    '*': 'canInteractFleet'
+  },
+  FleetHistory: {
     '*': 'canInteractFleet'
   }
 };

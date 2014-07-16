@@ -4,7 +4,7 @@ var AdminController = {
     var uuid = require('node-uuid');
     var fs = require('fs');
     var level;
-    var data = JSON.parse(fs.readFileSync('./api/services/levelList.json'));
+    var data = JSON.parse(fs.readFileSync('./config/levelList.json'));
     level = data[req.headers.eve_charname];
     switch(level) {
       case 2:
