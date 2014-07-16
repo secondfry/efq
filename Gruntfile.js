@@ -16,48 +16,28 @@
 
 module.exports = function (grunt) {
 
-
-
-  /**
-   * CSS files to inject in order
-   * (uses Grunt-style wildcard/glob/splat expressions)
-   *
-   * By default, Sails also supports LESS in development and production.
-   * To use SASS/SCSS, Stylus, etc., edit the `sails-linker:devStyles` task 
-   * below for more options.  For this to work, you may need to install new 
-   * dependencies, e.g. `npm install grunt-contrib-sass`
-   */
-
   var cssFilesToInject = [
+    'linker/styles/normalize-3.0.1.css',
+    'linker/styles/main.css',
+    'js/fancybox/jquery.fancybox.css"',
     'linker/**/*.css'
   ];
 
-
-  /**
-   * Javascript files to inject in order
-   * (uses Grunt-style wildcard/glob/splat expressions)
-   *
-   * To use client-side CoffeeScript, TypeScript, etc., edit the 
-   * `sails-linker:devJs` task below for more options.
-   */
-
   var jsFilesToInject = [
-
-    // Below, as a demonstration, you'll see the built-in dependencies 
-    // linked in the proper order order
-
     // Bring in the socket.io client
     'linker/js/socket.io.js',
-
     // then beef it up with some convenience logic for talking to Sails.js
     'linker/js/sails.io.js',
-
+    // jQuery, DNA to image, custom helpers
+    'linker/js/jquery-1.11.1.min.js',
+    'linker/js/fancybox/jquery.fancybox.pack.js',
+    'linker/js/fuzzysteve.ship.js',
+    'linker/js/helpers.js',
     // A simpler boilerplate library for getting you up and running w/ an
     // automatic listener for incoming messages from Socket.io.
     'linker/js/app.js',
 
-    // *->    put other dependencies here   <-*
-
+    '/js/main.js',
     // All of the rest of your app scripts imported here
     'linker/**/*.js'
   ];

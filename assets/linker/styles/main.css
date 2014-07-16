@@ -1,5 +1,5 @@
-@font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 400; src: local('Ubuntu'), url(Ubuntu.woff) format('woff'); }
-@font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 700; src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(Ubuntu-Bold.woff) format('woff'); }
+@font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 400; src: local('Ubuntu'), url(../../styles/Ubuntu.woff) format('woff'); }
+@font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 700; src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(../../styles/Ubuntu-Bold.woff) format('woff'); }
 html { font: 0.8em/1.231 'Ubuntu', sans-serif; background: #222; color: #ddd; }
 body { padding: 0 1em; }
 input[type=submit] { color: #222; background: #ddd; border: 1px solid #bbb; margin: 0.5em; padding: 0.1em 0.2em; }
