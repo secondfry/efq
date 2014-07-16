@@ -10,11 +10,10 @@
   <body>
     <header id="header">
       <h1>RAISA</h1>
-      <form id="login-form" action="javascript:void(0)">
-        <label for="login-password">Пароль</label>
-        <input type="password" id="login-password" name="login-password" />
-        <input type="submit" value="Войти" />
-      </form>
+      <div id="login-div">
+        <button id="ask-login">Ask</button>
+        <button id="check-login">Check</button>
+      </div>
     </header>
     <div id="main">
       <%- body %>

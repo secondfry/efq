@@ -7,7 +7,11 @@ module.exports = {
       unique: true,
       required: true
     },
-    password: {
+    token: {
+      type: 'string',
+      required: true
+    },
+    secret: {
       type: 'string',
       required: true
     },

@@ -14,9 +14,17 @@ socket.get('/queue', function(data) {
   });
 });
 
-$('#login-form').submit(function(e){
+$('#ask-login').click(function(e){
   e.preventDefault();
-  $.post('/admin/loginOrReg', {password: $('#login-password').val()}, function() {
+  $.post('/admin/asklogin', function(data) {
+    CCPEVE.sendMail(1, 'Your token', 'Enter it to RAISA Shield channel and wait for evelocal to get that message.\n\n' + data);
+  })
+});
+
+$('#check-login').click(function(e){
+  e.preventDefault();
+  $.post('/admin/checklogin', function(data) {
+    CCPEVE.sendMail(1, 'Welcome', 'You are inside!\n\n' + data);
     location.reload()
   })
 });

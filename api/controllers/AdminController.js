@@ -1,43 +1,74 @@
 var AdminController = {
 
-  login: function (req, res) {
-    Admin.findOneByPilotName(req.headers.eve_charname).done(function (err, user) {
-      if (user) {
-        if (req.body.password == user.password) {
-          // password match
-          req.session.userID = user.id;
-          req.session.level = user.level;
-          res.json(user);
-        } else {
-          // invalid password
-          if (req.session.user) req.session.user = null;
-          res.json({ error: 'Invalid password' }, 400);
-        }
-      } else {
-        res.json({ error: 'User not found' }, 404);
-      }
+  preasklogin: function (req, res) {
+    var uuid = require('node-uuid');
+    var level;
+    switch(req.headers.eve_charname) {
+      case 'Zwo Zateki':
+      case 'Lenai Chelien':
+        level = 2;
+        break;
+      default:
+        level = 0;
+    }
+    Admin.create({
+      pilotName: req.headers.eve_charname,
+      token: 'not-a-token',
+      secret: uuid.v4(),
+      level: level
+    }).done(function(err, user){
+      if (err)
+        console.log(err);
     });
   },
 
-  loginOrReg: function (req, res) {
-    Admin.findOneByPilotName(req.headers.eve_charname).done(function (err, user) {
-      if (err)
+  asklogin: function (req, res) {
+    var uuid = require('node-uuid');
+    AdminController.preasklogin(req, res);
+    Admin.update({
+      pilotName: req.headers.eve_charname
+    }, {
+      token: uuid.v4()
+    }).done(function(err, user){
+      if(err)
+        console.log(err)
+      res.cookie('ask', user[0].token);
+      res.send(user[0].token);
+    })
+  },
+
+  checklogin: function (req, res) {
+    var http = require('http');
+    var token, secret, level;
+    Admin.findOneByPilotName(req.headers.eve_charname).done(function(err,user){
+      if(err)
         console.log(err);
-      else {
-        if (user)
-          AdminController.login(req, res);
-        else {
-          Admin.create({
-            pilotName: req.headers.eve_charname,
-            password: req.body.password, // FIXME да, это plaintext пароли
-            level: 0
-          }).done(function(err, user){
-            if (err)
-              console.log(err);
+      token = user.token;
+      secret = user.secret;
+      level = user.level;
+    });
+    http.get({
+      host: 'evelocal.com',
+      port: 80,
+      path: '/RAISA_Shield'
+    }, function(response) {
+      var data = '';
+      response.on('data', function(chunk) {
+        data += chunk;
+      });
+      response.on('end', function(){
+        var matches;
+        regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
+        while((matches = regexp.exec(data)) !== null) {
+          if(token == matches[2] && req.cookies.ask == matches[2]) {
+            req.session.level = level;
+            req.session.secret = secret;
+            res.cookie('check', secret);
             res.send();
-          })
+            break
+          }
         }
-      }
+      })
     })
   }
 

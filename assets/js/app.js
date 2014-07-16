@@ -17,8 +17,6 @@
 
   socket.on('connect', function socketConnected() {
 
-    socket.get('/')
-
     // Listen for Comet messages from Sails
     socket.on('message', function messageReceived(message) {
 
@@ -58,6 +56,9 @@
       }
     });
 
+    socket.on('reload', function(bool) {
+      location.reload()
+    });
 
     ///////////////////////////////////////////////////////////
     // Here's where you'll want to add any custom logic for
