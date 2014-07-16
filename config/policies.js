@@ -13,7 +13,7 @@
 
 
 module.exports.policies = {
-  '*': ['checkBanList', 'checkSecret'],
+  '*': ['checkBanList', 'checkSecret', 'setSession'],
   Capsuleer: {
     '*': 'canInteractPilot'
   },

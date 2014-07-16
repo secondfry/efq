@@ -29,20 +29,11 @@ var QueueController = {
       pilotLocation: location,
       category: category
     }).done(function(err, queueLine) {
-      if (err) {
-        console.log(err)
-      } else {
-        var i = 0;
-        Queue.find({category: category}).sort('updatedAt ASC').done(function(err, queue){
-          if (err) {
-            console.log(err)
-          } else {
-            while(queue[i].pilotName != req.headers.eve_charname) {
-              i++;
-            }
-            res.send({position: i+1});
-          }
-        });
+      if (err)
+        console.log(err);
+      if (queueLine) {
+        req.session.pilotQueue = "queue";
+        res.send({action: 'queue-joined', message: 'Вы попали в очередь в запас.'});
         PilotHistoryService.add(queueLine, "queue");
         sails.io.sockets.in('admin').emit('queue', {action: 'join', queueLine: queueLine})
       }
@@ -56,10 +47,24 @@ var QueueController = {
       if (err) {
         console.log(err)
       } else {
-        res.send();
+        req.session.pilotQueue = "none";
+        res.send({action: 'queue-left', message: 'Пилот ' + req.body.pilotName + ' покинул очередь в запас.'});
         sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotName: req.body.pilotName, pilotShiptype: req.body.pilotShiptype})
       }
     })
+  },
+
+  position: function (req, res) {
+    Queue.findOneByPilotName(req.body.pilotName).done(function(err, queueLine){
+      if (err)
+        console.log(err)
+      if (queueLine) {
+        var category = queueLine.category;
+        var position = PositionService.queue(req, res, category, req.headers.eve_charname);
+      } else {
+        res.send({action: 'queue-position', message: 'Пилот ' + req.body.pilotName + 'отсутствует в очереди в запас.'});
+      }
+    });
   }
 
 };

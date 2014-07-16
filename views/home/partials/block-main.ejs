@@ -1,11 +1,49 @@
 <%
-typeof req.headers.eve_stationname == 'undefined' ?
-  location = req.headers.eve_solarsystemname + ' - ' + req.headers.eve_constellationname + ' - ' + req.headers.eve_regionname :
-  location = req.headers.eve_stationname;
+  console.log(req.session);
+  isInFleet = false;
+  isInQueue = false;
+  switch(req.session.pilotQueue) {
+    case 'main':
+      positionMessage = '<p>Вы находитесь в основе флота. Следуйте указаниям ФК.</p>';
+      isInFleet = true;
+      break;
+    case 'queue':
+      positionMessage = '<p>Вы находитесь в очереди в запас флота. Позиция: ' + req.session.pilotPosition + '.</p>';
+      isInQueue = true;
+      break;
+    case 'reserve':
+      positionMessage = '<p>Вы находитесь в очереди в основу флота. Позиция: ' + req.session.pilotPosition + '.</p>';
+      isInQueue = true;
+      break;
+    case 'none':
+      positionMessage = '<p>Вы не находитесь в очереди.</p>';
+      break;
+    case undefined:
+      positionMessage = '<p>Перезагрузите страницу.</p>';
+      break;
+    default:
+      positionMessage = '<p>Но как?</p>';
+      break;
+  }
+
+  typeof req.headers.eve_stationname == 'undefined' ?
+    location = req.headers.eve_solarsystemname + ' - ' + req.headers.eve_constellationname + ' - ' + req.headers.eve_regionname :
+    location = req.headers.eve_stationname;
+
+  joinDisabled = '';
+  leaveDisabled = '';
+  if(isInFleet) {
+    joinDisabled = ' disabled';
+    leaveDisabled = ' disabled';
+  } else if(isInQueue) {
+    joinDisabled = ' disabled';
+    leaveDisabled = '';
+  }
+
+  console.log(joinDisabled, leaveDisabled, isInFleet, isInQueue);
 %>
 <p>Привет, <span id="charname"><%= req.headers.eve_charname %></span>!</p>
 <p>Ты находишься в <b><%= location %></b> на корабле <span id="shiptype"><%= req.headers.eve_shiptypename %></span> :)</p>
-<p id="queue-position"></p>
 <form id="fit-form" action="javascript:void(0)">
   <label for="fit">Фит</label> <span class="link" id="FAQ">// а что делать-то?</span><br />
   <div id="fit-wrapper">
@@ -13,6 +51,10 @@ typeof req.headers.eve_stationname == 'undefined' ?
   </div>
   <input id="fit-submit" type="submit" value="Встать в очередь" />
 </form>
-<p><span class="link" id="queue-join">Регистрация в очередь</span></p>
-<p><span class="link" id="queue-leave">Покинуть очередь</span></p>
+<p><span class="link<%= joinDisabled %>" id="queue-join">Регистрация в очередь</span></p>
+<p><span class="link<%= leaveDisabled %>" id="queue-leave">Покинуть очередь</span></p>
 <p>Когда подойдет твоя очередь, ФК попросит поставить "+" в канале <span class="link" id="channel">RAISA WL</span>. Подключись к нему!</p>
+<h2>Сообщения</h2>
+<div id="messages">
+  <%- positionMessage %>
+</div>

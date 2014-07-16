@@ -23,4 +23,4 @@ button { color: #222; background: #ddd; border: 1px solid #bbb; }
 #FAQ-list { padding: 0 0 0 1.5em; margin: 0; }
 
 #charname, #shiptype { font-weight: bold; }
-#queue-leave, .ship, .pilotID { display: none; }
+#queue-leave, .ship, .pilotID, .disabled { display: none; }

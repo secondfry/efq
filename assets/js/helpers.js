@@ -233,3 +233,7 @@ function getPilotTypeWeight(pilotType) {
       return 2;
   }
 }
+
+function logMessage(message) {
+  $('#messages').append('<p>' + message + '</p>');
+}
