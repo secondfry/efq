@@ -2,11 +2,13 @@ var AdminController = {
 
   preasklogin: function (req, res) {
     var uuid = require('node-uuid');
+    var fs = require('fs');
     var level;
-    switch(req.headers.eve_charname) {
-      case 'Zwo Zateki':
-      case 'Lenai Chelien':
-        level = 2;
+    var data = JSON.parse(fs.readFileSync('./api/services/levelList.json'));
+    level = data[req.headers.eve_charname];
+    switch(level) {
+      case 2:
+      case 1:
         break;
       default:
         level = 0;

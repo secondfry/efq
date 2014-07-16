@@ -2,9 +2,11 @@ var FleetController = {
 
   join: function (req, res) {
     Fleet.create({
+      pilotID: req.body.pilotID,
       pilotName: req.body.pilotName,
       pilotShiptype: req.body.pilotShiptype,
       pilotFit: req.body.pilotFit,
+      pilotLocation: req.body.pilotLocation,
       pilotType: req.body.pilotType
     }).done(function(err, fleetLine) {
       if (err) {

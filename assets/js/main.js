@@ -67,11 +67,13 @@ $(document).on('click', '.addToFleet', function(){
   var queueLine = $(this).parents('.queueLine');
   if (queueLine.length) {
     fleetJoin(queueLine, "main");
-    queueRemove(queueLine)
+    queueRemove(queueLine);
+    CCPEVE.inviteToFleet(queueLine.find('.pilotID').html());
   } else {
     var fleetLine = $(this).parents('.fleetLine');
     fleetRemove(fleetLine);
-    fleetJoin(fleetLine, "main")
+    fleetJoin(fleetLine, "main");
+    CCPEVE.inviteToFleet(fleetLine.find('.pilotID').html());
   }
 });
 
@@ -98,4 +100,8 @@ socket.get('/fleet', function(data) {
     addToObject(js_fleet, this);
     addFleetLine(this)
   });
+});
+
+$(document).on('click', '#channel', function(){
+  CCPEVE.joinChannel('RAISA WL');
 });

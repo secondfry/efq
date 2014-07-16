@@ -46,8 +46,13 @@ function createCommonLine(line, lineClass) {
   jQ_line.append(
     $('<td class="pilotID"></td>').html(line.pilotID)
   );
+  jQ_pilot = $('<span class="link"></span>').html(line.pilotName).click(function(){
+    if(window.CCPEVE) {
+      CCPEVE.showInfo(1377, line.pilotID) // 1377 - Character
+    }
+  });
   jQ_line.append(
-    $('<td class="pilotName"></td>').html(line.pilotName)
+    $('<td class="pilotName"></td>').html(jQ_pilot)
   );
   jQ_ship = $('<div class="ship"></div>').attr('id', pilotNameToId(line.pilotName + line.pilotShiptype));
   $('body').append(jQ_ship);
@@ -65,13 +70,9 @@ function createCommonLine(line, lineClass) {
   jQ_line.append(
     $('<td class="pilotFit"></td>').html(line.pilotFit)
   );
-  switch(lineClass) {
-    case 'queueLine':
-      jQ_line.append(
-        $('<td class="pilotLocation"></td>').html(line.pilotLocation)
-      );
-      break;
-  }
+  jQ_line.append(
+    $('<td class="pilotLocation"></td>').html(line.pilotLocation)
+  );
   jQ_line.append(
     $('<td class="updatedAt"></td>').html(line.updatedAt)
   );
@@ -139,24 +140,25 @@ function prepareFit(textarea) {
 
 function queueRemove(line) {
   socket.post('/queue/remove', {
-    pilotName: line.find('.pilotName').html(),
+    pilotName: line.find('.pilotName span').html(),
     pilotShiptype: line.find('.pilotShiptype span').html()
   })
 }
 
 function fleetRemove(line) {
   socket.post('/fleet/remove', {
-    pilotName: line.find('.pilotName').html(),
+    pilotName: line.find('.pilotName span').html(),
     pilotShiptype: line.find('.pilotShiptype span').html()
   })
 }
 
 function fleetJoin(line, type) {
-  CCPEVE.inviteToFleet(line.find('.pilotID').html());
   socket.post('/fleet/join', {
-    pilotName: line.find('.pilotName').html(),
+    pilotID: line.find('.pilotID').html(),
+    pilotName: line.find('.pilotName span').html(),
     pilotShiptype: line.find('.pilotShiptype span').html(),
     pilotFit: line.children('.pilotFit').html(),
+    pilotLocation: line.find('.pilotLocation').html(),
     pilotType: type
   });
 }
