@@ -33,7 +33,7 @@ var AdminController = {
       token: uuid.v4()
     }).done(function(err, user){
       if(err)
-        console.log(err)
+        console.log(err);
       res.cookie('ask', user[0].token);
       res.send(user[0].token);
     })
@@ -43,35 +43,39 @@ var AdminController = {
     var http = require('http');
     var token, secret, level;
     Admin.findOneByPilotName(req.headers.eve_charname).done(function(err,user){
-      if(err)
+      if (err)
         console.log(err);
-      token = user.token;
-      secret = user.secret;
-      level = user.level;
+      if (user) {
+        token = user.token;
+        secret = user.secret;
+        level = user.level;
+        http.get({
+          host: 'evelocal.com',
+          port: 80,
+          path: '/RAISA_Shield'
+        }, function(response) {
+          var data = '';
+          response.on('data', function(chunk) {
+            data += chunk;
+          });
+          response.on('end', function(){
+            var matches;
+            regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
+            while((matches = regexp.exec(data)) !== null) {
+              if(token == matches[2] && req.cookies.ask == matches[2]) {
+                req.session.level = level;
+                req.session.secret = secret;
+                res.cookie('check', secret);
+                res.send();
+                break
+              }
+            }
+          })
+        })
+      } else {
+        res.send();
+      }
     });
-    http.get({
-      host: 'evelocal.com',
-      port: 80,
-      path: '/RAISA_Shield'
-    }, function(response) {
-      var data = '';
-      response.on('data', function(chunk) {
-        data += chunk;
-      });
-      response.on('end', function(){
-        var matches;
-        regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
-        while((matches = regexp.exec(data)) !== null) {
-          if(token == matches[2] && req.cookies.ask == matches[2]) {
-            req.session.level = level;
-            req.session.secret = secret;
-            res.cookie('check', secret);
-            res.send();
-            break
-          }
-        }
-      })
-    })
   }
 
 };

@@ -235,5 +235,22 @@ function getPilotTypeWeight(pilotType) {
 }
 
 function logMessage(message) {
-  $('#messages').append('<p>' + message + '</p>');
+  $('#messages').prepend('<p><span class="time">[' + new Date().toLocaleFormat('%Y-%m-%d %H:%M') + ']: </span>' + message + '</p>');
+}
+
+if(!Date.prototype.toLocaleFormat){
+  Date.prototype.toLocaleFormat = function(format) {
+    var f = {
+      Y : this.getUTCFullYear(),
+      y : this.getUTCFullYear()-(this.getUTCFullYear()>=2e3?2e3:1900),
+      m : this.getUTCMonth() + 1,
+      d : this.getUTCDate(),
+      H : this.getUTCHours(),
+      M : this.getUTCMinutes(),
+      S : this.getUTCSeconds()
+    }, k;
+    for(k in f)
+      format = format.replace('%' + k, f[k] < 10 ? "0" + f[k] : f[k]);
+    return format;
+  }
 }

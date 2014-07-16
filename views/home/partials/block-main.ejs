@@ -1,5 +1,4 @@
 <%
-  console.log(req.session);
   isInFleet = false;
   isInQueue = false;
   switch(req.session.pilotQueue) {
@@ -37,10 +36,9 @@
     leaveDisabled = ' disabled';
   } else if(isInQueue) {
     joinDisabled = ' disabled';
-    leaveDisabled = '';
+  } else {
+    leaveDisabled = ' disabled';
   }
-
-  console.log(joinDisabled, leaveDisabled, isInFleet, isInQueue);
 %>
 <p>Привет, <span id="charname"><%= req.headers.eve_charname %></span>!</p>
 <p>Ты находишься в <b><%= location %></b> на корабле <span id="shiptype"><%= req.headers.eve_shiptypename %></span> :)</p>

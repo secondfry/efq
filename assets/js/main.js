@@ -9,6 +9,12 @@ if (window.CCPEVE && trusted === true) {
   $.post('/pilot/findOrAdd');
 
   socket.get('/queue', function (data) {
+    data.sort(function (a, b) {
+      value_return = a.pilotShiptype - b.pilotShiptype;
+      if (value_return == 0)
+        value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
+      return value_return
+    });
     $.each(data, function () {
       addToObject(js_queue, this);
       addQueueLine(this)
