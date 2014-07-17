@@ -23,16 +23,23 @@ if (window.CCPEVE && trusted === true) {
 
   $('#ask-login').click(function (e) {
     e.preventDefault();
-    $.post('/admin/asklogin', function (data) {
-      CCPEVE.sendMail(1, 'Your token', 'Enter it to RAISA Shield channel and wait for evelocal to get that message.\n\n' + data);
+    $.post('/admin/preasklogin', function (data) {
+      logMessage(data.message);
+      $.post('/admin/asklogin', function (data) {
+        logMessage(data.message);
+        CCPEVE.sendMail(1, 'Your token', 'Enter it to RAISA Shield channel and wait for evelocal to get that message.\n\n' + data.data);
+      });
     })
   });
 
   $('#check-login').click(function (e) {
     e.preventDefault();
     $.post('/admin/checklogin', function (data) {
-      CCPEVE.sendMail(1, 'Welcome', 'You are inside!\n\n' + data);
-      location.reload()
+      logMessage(data.message);
+      if (data.data == authdone) {
+        CCPEVE.sendMail(1, 'Welcome', 'You are inside!');
+        location.reload()
+      }
     })
   });
 

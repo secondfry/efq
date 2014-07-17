@@ -1,54 +1,69 @@
 var AdminController = {
 
   preasklogin: function (req, res) {
-    var uuid = require('node-uuid');
-    var fs = require('fs');
-    var level;
-    var data = JSON.parse(fs.readFileSync('./config/levelList.json'));
-    level = data[req.headers.eve_charname];
-    switch(level) {
-      case 2:
-      case 1:
-        break;
-      default:
-        level = 0;
-    }
-    Admin.create({
-      pilotName: req.headers.eve_charname,
-      token: 'not-a-token',
-      secret: uuid.v4(),
-      level: level
-    }).done(function(err, user){
+    Admin.findOneByPilotName(req.headers.eve_charname).done(function(err,user){
       if (err)
         console.log(err);
-    });
+      if (!user) {
+        var uuid = require('node-uuid');
+        var fs = require('fs');
+        var level;
+        var data = JSON.parse(fs.readFileSync('./config/levelList.json'));
+        level = data[req.headers.eve_charname];
+        switch(level) {
+          case 2:
+          case 1:
+            break;
+          default:
+            level = 0;
+        }
+        Admin.create({
+          pilotName: req.headers.eve_charname,
+          token: 'not-a-token',
+          secret: uuid.v4(),
+          level: level
+        }).done(function(err, user){
+          if (err)
+            console.log(err);
+          res.send({action: 'admin-preask', message: 'Создан пользователь ' + user.pilotName + '.', data: 'created'})
+        });
+      } else {
+        res.send({action: 'admin-preask', message: 'Найден пользователь ' + user.pilotName + '.', data: 'found'})
+      }
+    })
   },
 
   asklogin: function (req, res) {
-    var uuid = require('node-uuid');
-    AdminController.preasklogin(req, res);
-    Admin.update({
-      pilotName: req.headers.eve_charname
-    }, {
-      token: uuid.v4()
-    }).done(function(err, user){
-      if(err)
+    Admin.findOneByPilotName(req.headers.eve_charname).done(function(err,user) {
+      if (err)
         console.log(err);
-      res.cookie('ask', user[0].token);
-      res.send(user[0].token);
+      if (user) {
+        var uuid = require('node-uuid');
+        Admin.update({
+          pilotName: req.headers.eve_charname
+        }, {
+          token: uuid.v4()
+        }).done(function(err, user){
+          if(err)
+            console.log(err);
+          res.cookie('ask', user[0].token).send({action: 'admin-ask', message: 'Пользователю ' + req.headers.eve_charname + ' выдан токен.', data: user[0].token});
+        })
+      } else {
+        res.send({action: 'admin-ask', message: 'Пользователь ' + user.pilotName + ' не найден!'});
+      }
     })
   },
 
   checklogin: function (req, res) {
-    var http = require('http');
-    var token, secret, level;
-    Admin.findOneByPilotName(req.headers.eve_charname).done(function(err,user){
+    Admin.findOneByPilotName(req.headers.eve_charname).done(function(err, user){
       if (err)
         console.log(err);
       if (user) {
-        token = user.token;
-        secret = user.secret;
-        level = user.level;
+        var http = require('http');
+        var
+          token = user.token,
+          secret = user.secret,
+          level = user.level;
         http.get({
           host: 'evelocal.com',
           port: 80,
@@ -59,21 +74,24 @@ var AdminController = {
             data += chunk;
           });
           response.on('end', function(){
-            var matches;
+            var matches, isAuthDone = false;
             regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
             while((matches = regexp.exec(data)) !== null) {
               if(token == matches[2] && req.cookies.ask == matches[2]) {
+                isAuthDone = true;
                 req.session.level = level;
                 req.session.secret = secret;
                 res.cookie('check', secret);
-                res.send();
+                res.send({action: 'admin-check', message: 'Пользователь ' + user.pilotName + ' успешно авторизован.', data: 'auth-done'});
                 break
               }
             }
+            if (isAuthDone == false)
+              res.send({action: 'admin-check', message: 'Пользователь ' + user.pilotName + ' не прошел авторизацию.', data: 'auth-fail'});
           })
         })
       } else {
-        res.send();
+        res.send({action: 'admin-check', message: 'Пользователь ' + user.pilotName + ' не найден!', data: 'user-not-found'});
       }
     });
   }
