@@ -25,12 +25,13 @@
     socket.on('queue', function queueEvent(data) {
       switch(data.action) {
         case 'join':
+          socket.get('/log/index', {data: data.queueLine})
+          addQueueLine(data.queueLine, false);
           addToObject(js_queue, data.queueLine);
-          addQueueLine(data.queueLine);
           break;
         case 'leave':
-          removeFromObject(js_queue, data);
           $('#' + pilotNameToId(data.pilotName)).remove();
+          removeFromObject(js_queue, data);
           break;
       }
     });
@@ -38,12 +39,12 @@
     socket.on('fleet', function queueEvent(data) {
       switch(data.action) {
         case 'join':
+          addFleetLine(data.fleetLine, false);
           addToObject(js_fleet, data.fleetLine);
-          addFleetLine(data.fleetLine);
           break;
         case 'leave':
-          removeFromObject(js_fleet, data);
           $('#' + pilotNameToId(data.pilotName)).remove();
+          removeFromObject(js_fleet, data);
           break;
       }
     });

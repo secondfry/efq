@@ -7,16 +7,18 @@ if (window.CCPEVE && trusted === true) {
   jQ_pilotName = $('#charname').html();
 
   socket.get('/queue', function (data) {
-    data.sort(function (a, b) {
-      var value_return = a.pilotShiptype - b.pilotShiptype;
-      if (value_return == 0)
-        value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
-      return value_return
-    });
-    $.each(data, function () {
-      addToObject(js_queue, this);
-      addQueueLine(this)
-    });
+    if (data.action != 'denied') {
+      data.sort(function (a, b) {
+        var value_return = a.pilotShiptype - b.pilotShiptype;
+        if (value_return == 0)
+          value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
+        return value_return
+      });
+      $.each(data, function () {
+        addToObject(js_queue, this);
+        addQueueLine(this, true)
+      });
+    }
   });
 
   $('#ask-login').click(function (e) {
@@ -34,7 +36,7 @@ if (window.CCPEVE && trusted === true) {
     e.preventDefault();
     $.post('/admin/checklogin', function (data) {
       logMessage(data.message);
-      if (data.data == "authdone") {
+      if (data.data == "auth-done") {
         CCPEVE.sendMail(1, 'Welcome', 'You are inside!');
         location.reload()
       }
@@ -117,18 +119,20 @@ if (window.CCPEVE && trusted === true) {
   });
 
   socket.get('/fleet', function (data) {
-    data.sort(function (a, b) {
-      var value_return = getPilotTypeWeight(b.pilotType) - getPilotTypeWeight(a.pilotType);
-      if (value_return == 0)
-        value_return = a.pilotShiptype - b.pilotShiptype;
-      if (value_return == 0)
-        value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
-      return value_return
-    });
-    $.each(data, function () {
-      addToObject(js_fleet, this);
-      addFleetLine(this)
-    });
+    if (data.action != 'denied') {
+      data.sort(function (a, b) {
+        var value_return = getPilotTypeWeight(b.pilotType) - getPilotTypeWeight(a.pilotType);
+        if (value_return == 0)
+          value_return = a.pilotShiptype - b.pilotShiptype;
+        if (value_return == 0)
+          value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
+        return value_return
+      });
+      $.each(data, function () {
+        addToObject(js_fleet, this);
+        addFleetLine(this, true)
+      });
+    }
   });
 
   $(document).on('click', '#channel', function () {

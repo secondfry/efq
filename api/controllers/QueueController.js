@@ -33,9 +33,9 @@ var QueueController = {
         console.log(err);
       if (queueLine) {
         req.session.pilotQueue = "queue";
-        res.send({action: 'queue-joined', message: 'Вы попали в очередь в запас.'});
+        sails.io.sockets.in('admin').emit('queue', {action: 'join', queueLine: queueLine});
         PilotHistoryService.add(queueLine, "queue");
-        sails.io.sockets.in('admin').emit('queue', {action: 'join', queueLine: queueLine})
+        res.send({action: 'queue-joined', message: 'Вы попали в очередь в запас.'})
       }
     });
   },
@@ -48,8 +48,8 @@ var QueueController = {
         console.log(err)
       } else {
         req.session.pilotQueue = "none";
-        res.send({action: 'queue-left', message: 'Пилот ' + req.body.pilotName + ' покинул очередь в запас.'});
-        sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotName: req.body.pilotName, pilotShiptype: req.body.pilotShiptype})
+        sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotName: req.body.pilotName, pilotShiptype: req.body.pilotShiptype});
+        res.send({action: 'queue-left', message: 'Пилот ' + req.body.pilotName + ' покинул очередь в запас.'})
       }
     })
   },

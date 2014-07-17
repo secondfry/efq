@@ -41,8 +41,8 @@ js_queue.Type = "queue";
 js_fleet.Type = "main";
 js_reserve.Type = "reserve";
 
-if(!Date.prototype.toLocaleFormat){
-  Date.prototype.toLocaleFormat = function(format) {
+if(!Date.prototype.toUTCFormat){
+  Date.prototype.toUTCFormat = function(format) {
     var f = {
       Y : this.getUTCFullYear(),
       y : this.getUTCFullYear()-(this.getUTCFullYear()>=2e3?2e3:1900),
@@ -58,7 +58,15 @@ if(!Date.prototype.toLocaleFormat){
   }
 }
 
-function createCommonLine(line, lineClass) {
+function createCommonLine(line, lineClass, fixtime) {
+  var time = line.updatedAt.match(/([\w]{4})-([\w]{2})-([\w]{2})T([\w]{2}):([\w]{2}):([\w]{2})/);
+  if (fixtime) {
+    time = new Date(new Date(time[1], time[2], time[3], time[4], time[5]).getTime() + 14400000); // FIXME 4 часа
+  } else {
+    time = new Date(time[1], time[2], time[3], time[4], time[5]);
+  }
+  time = time.toUTCFormat('%Y-%m-%d <b>%H:%M</b>');
+
   jQ_line = $('<tr></tr>').attr('id', pilotNameToId(line.pilotName)).attr('class', lineClass);
   jQ_line.append(
     $('<td class="pilotID"></td>').html(line.pilotID)
@@ -103,21 +111,19 @@ function createCommonLine(line, lineClass) {
   jQ_line.append(
     $('<td class="pilotLocation"></td>').html(line.pilotLocation)
   );
-  var time = line.updatedAt.match(/([\w]{4})-([\w]{2})-([\w]{2})T([\w]{2}):([\w]{2}):([\w]{2})/);
-  time = time[1] + '-' + time[2] + '-' + time[3] + ' <b>' + time[4] + ':' + time[5] + '</b>';
   jQ_line.append(
     $('<td class="updatedAt"></td>').html(time)
   );
   return jQ_line
 }
 
-function addQueueLine(line) {
-  var jQ_line = createCommonLine(line, 'queueLine');
+function addQueueLine(line, fixtime) {
+  var jQ_line = createCommonLine(line, 'queueLine', fixtime);
   $('#queue').append(jQ_line)
 }
 
-function addFleetLine(line) {
-  var jQ_line = createCommonLine(line, 'fleetLine');
+function addFleetLine(line, fixtime) {
+  var jQ_line = createCommonLine(line, 'fleetLine', fixtime);
 
   var str_pilotType;
   switch(line.pilotType) {
@@ -252,18 +258,19 @@ function getPilotTypeWeight(pilotType) {
 }
 
 function logMessage(message) {
-  $('#messages').prepend('<p><span class="time">[' + new Date().toLocaleFormat('%Y-%m-%d %H:%M') + ']: </span>' + message + '</p>');
+  $('#messages').prepend('<p><span class="time">[' + (new Date()).toUTCFormat('%Y-%m-%d %H:%M') + ']: </span>' + message + '</p>');
 }
 
-function amIReady() {
-  var times = 3, jQ_audio = $('<audio controls><source src="/audio/pizzicato.ogg" type="audio/ogg"></audio>').load();
-  function playSound() {
-    if (times > 0) {
-      jQ_audio.get(0).play();
-      times--;
-      setTimeout(playSound, 2500)
-    }
+var times = 3;
+function playSound() {
+  if (times > 0) {
+    $('#notification').get(0).play();
+    times--;
+    setTimeout(playSound, 2500)
   }
+}
+function amIReady() {
+  times = 3;
   playSound();
   var block_ready = $('<div class="tac"><p>ФК запрашивает вашу готовность!</p><span class="actionButton readyCheck">Я готов!</span></div>');
   $.fancybox(block_ready)

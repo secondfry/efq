@@ -18,14 +18,17 @@ module.exports.policies = {
     '*': 'canInteractPilot'
   },
   Queue: {
-    '*': 'canInteractQueue'
+    '*': ['canInteractQueue'],
+    'create': 'checkFleetThere'
+  },
+  QueueController: {
+    '*': ['canInteractQueue'],
+    'join': 'checkFleetThere'
   },
   Admin: {
     '*': 'canInteractAdmin'
   },
-  Fleet: {
-    '*': 'canInteractFleet'
-  },
+  Fleet: 'canInteractFleet',
   FleetHistory: {
     '*': 'canInteractFleet'
   }

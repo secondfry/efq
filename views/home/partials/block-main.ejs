@@ -39,8 +39,20 @@
   } else {
     leaveDisabled = ' disabled';
   }
+
+  switch(isFleetThere) {
+    case true:
+      fleetMessage = 'Сейчас есть активный флот.';
+      break;
+    case false:
+      fleetMessage = 'Сейчас активного флота нет.';
+      joinDisabled = ' disabled';
+      break;
+    default:
+      fleetMessage = isFleetThere;
+  }
 %>
-<p>Привет, <span id="charname"><%= req.headers.eve_charname %></span>!</p>
+<p>Привет, <span id="charname"><%= req.headers.eve_charname %></span>! <%= fleetMessage %></p>
 <p>Ты находишься в <b><%= location %></b> на корабле <span id="shiptype"><%= req.headers.eve_shiptypename %></span> :)</p>
 <form id="fit-form" action="javascript:void(0)">
   <label for="fit">Фит</label> <span class="link" id="FAQ">// а что делать-то?</span><br />
