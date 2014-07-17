@@ -10,7 +10,7 @@ var PilotHistoryService = {
       if (err) {
         console.log(err)
       } else {
-        console.log(pilotHistoryLine)
+        console.log('#' + pilotHistoryLine.id + ': ' + pilotHistoryLine.pilotName + ' on ' + pilotHistoryLine.pilotShiptype + ' in ' + pilotHistoryLine.historyType)
       }
     })
   }

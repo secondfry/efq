@@ -48,8 +48,13 @@
       }
     });
 
-    socket.on('reload', function(bool) {
-      location.reload()
+    socket.on('ready-ask', function(){
+      amIReady()
+    });
+
+    socket.on('ready-check', function(data){
+      $('#' + pilotNameToId(data.pilotName)).find('.pilotReady').html('Да').blink({color: '#bfb'});
+      logMessage('Пилот ' + data.pilotName + ' - готов!')
     });
 
     ///////////////////////////////////////////////////////////

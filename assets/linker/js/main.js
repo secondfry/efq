@@ -8,7 +8,7 @@ if (window.CCPEVE && trusted === true) {
 
   socket.get('/queue', function (data) {
     data.sort(function (a, b) {
-      value_return = a.pilotShiptype - b.pilotShiptype;
+      var value_return = a.pilotShiptype - b.pilotShiptype;
       if (value_return == 0)
         value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
       return value_return
@@ -34,7 +34,7 @@ if (window.CCPEVE && trusted === true) {
     e.preventDefault();
     $.post('/admin/checklogin', function (data) {
       logMessage(data.message);
-      if (data.data == authdone) {
+      if (data.data == "authdone") {
         CCPEVE.sendMail(1, 'Welcome', 'You are inside!');
         location.reload()
       }
@@ -69,13 +69,27 @@ if (window.CCPEVE && trusted === true) {
   $(document).on('click', '.addToWait', function () {
     var queueLine = $(this).parents('.queueLine');
     if (queueLine.length) {
-      fleetJoin(queueLine, "reserve");
       queueRemove(queueLine)
+      fleetJoin(queueLine, "reserve");
     } else {
       var fleetLine = $(this).parents('.fleetLine');
       fleetRemove(fleetLine);
       fleetJoin(fleetLine, "reserve")
     }
+  });
+
+  $(document).on('click', '.readyAsk', function(){
+    var fleetLine = $(this).parents('.fleetLine');
+    $.post('/ready/ask', {pilotName: fleetLine.find('.pilotName span').html()}, function (data){
+      logMessage(data.message)
+    })
+  });
+
+  $(document).on('click', '.readyCheck', function(){
+    $.post('/ready/check', function (data){
+      logMessage(data.message)
+      $.fancybox.close()
+    })
   });
 
   $(document).on('click', '.addToFleet', function () {
@@ -104,7 +118,7 @@ if (window.CCPEVE && trusted === true) {
 
   socket.get('/fleet', function (data) {
     data.sort(function (a, b) {
-      value_return = getPilotTypeWeight(b.pilotType) - getPilotTypeWeight(a.pilotType);
+      var value_return = getPilotTypeWeight(b.pilotType) - getPilotTypeWeight(a.pilotType);
       if (value_return == 0)
         value_return = a.pilotShiptype - b.pilotShiptype;
       if (value_return == 0)
@@ -122,7 +136,7 @@ if (window.CCPEVE && trusted === true) {
   });
 
   $(document).on('click', '#FAQ', function () {
-    jQ_list = $('<ol id="FAQ-list"></ol>');
+    var jQ_list = $('<ol id="FAQ-list"></ol>');
     jQ_list.append('<li>Линкани свой фит в любой разрешенный канал.<br /><img src="/images/FAQ_1.png" class="FAQ-image" /></li>');
     jQ_list.append('<li>Скопируй свое же сообщение.<br /><img src="/images/FAQ_2.png" class="FAQ-image" /></li>');
     jQ_list.append('<li>Вставь в поле для фита.<br /><img src="/images/FAQ_3.png" class="FAQ-image" /></li>');
@@ -146,7 +160,7 @@ if (window.CCPEVE && trusted === true) {
     }, function (data) {
       var string = data.message + '\n\nCurrent FC: ' + data.data.FCName + '.';
       CCPEVE.sendMail(1, 'Fleet started', string);
-      setTimeout(location.reload(), 500)
+      setTimeout(function(){location.reload()}, 500)
     })
   });
 
@@ -156,7 +170,7 @@ if (window.CCPEVE && trusted === true) {
     }, function (data) {
       var string = data.message;
       CCPEVE.sendMail(1, 'Fleet ended', string);
-      setTimeout(location.reload(), 500)
+      setTimeout(function(){location.reload()}, 500)
     })
   });
 

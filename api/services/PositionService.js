@@ -6,7 +6,8 @@ var PositionService = {
       if (err)
         console.log(err);
       if (queue) {
-        while(queue[i].pilotName != pilotName) {
+        var queueLength = queue.length;
+        while(i < queueLength && queue[i].pilotName != pilotName) {
           i++;
         }
         req.session.pilotPosition = i + 1;
