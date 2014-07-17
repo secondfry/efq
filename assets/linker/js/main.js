@@ -6,8 +6,6 @@ $(document).on('click', '#trust-add', function(){
 if (window.CCPEVE && trusted === true) {
   jQ_pilotName = $('#charname').html();
 
-  $.post('/pilot/findOrAdd');
-
   socket.get('/queue', function (data) {
     data.sort(function (a, b) {
       value_return = a.pilotShiptype - b.pilotShiptype;

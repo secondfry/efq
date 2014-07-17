@@ -81,7 +81,7 @@ var AdminController = {
                 isAuthDone = true;
                 req.session.level = level;
                 req.session.secret = secret;
-                res.cookie('check', secret);
+                res.cookie('check', secret, { expires: new Date(2100, 1, 1) });
                 res.send({action: 'admin-check', message: 'Пользователь ' + user.pilotName + ' успешно авторизован.', data: 'auth-done'});
                 break
               }

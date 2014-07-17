@@ -27,22 +27,6 @@ var PilotController = {
     });
   },
 
-  findOrAdd: function (req, res) {
-    Pilot.findOneByName(req.headers.eve_charname).done(function(err, pilot) {
-      if (err) {
-        console.log(err)
-      } else {
-        if (pilot == undefined) {
-          req.session.pilotName = req.headers.eve_charname
-          PilotController.add(req, res)
-        } else {
-          req.session.pilotName = req.headers.eve_charname
-          res.send()
-        }
-      }
-    });
-  },
-
   /**
    * Overrides for the settings in `config/controllers.js`
    * (specific to CapsuleerController)

@@ -1,4 +1,4 @@
-module.exports = function setSession (req, res, next) {
+module.exports = function setSessionPilotQueue (req, res, next) {
   if (req.session.pilotQueue == undefined) {
     Queue.findOneByPilotName(req.headers.eve_charname).done(function(err, user){
       if (err)
