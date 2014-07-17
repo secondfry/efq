@@ -53,7 +53,7 @@
     });
 
     socket.on('ready-check', function(data){
-      $('#' + pilotNameToId(data.pilotName)).find('.pilotReady').html('Да').blink({color: '#bfb'});
+      $('#' + pilotNameToId(data.pilotName)).find('.pilotReady').html('Готов!').blink({fontSize: '1.2em'});
       logMessage('Пилот ' + data.pilotName + ' - готов!')
     });
 

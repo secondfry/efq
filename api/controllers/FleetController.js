@@ -7,7 +7,8 @@ var FleetController = {
       pilotShiptype: req.body.pilotShiptype,
       pilotFit: req.body.pilotFit,
       pilotLocation: req.body.pilotLocation,
-      pilotType: req.body.pilotType
+      pilotType: req.body.pilotType,
+      pilotReady: "no"
     }).done(function(err, fleetLine) {
       if (err) {
         console.log(err)

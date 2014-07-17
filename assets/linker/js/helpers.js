@@ -131,8 +131,17 @@ function addFleetLine(line) {
   jQ_line.append(
     $('<td class="pilotType"></td>').html(str_pilotType)
   );
+  var str_pilotReady;
+  switch(line.pilotReady) {
+    case 'yes':
+      str_pilotReady = 'Готов!';
+      break;
+    case 'no':
+      str_pilotReady = 'Нет';
+      break;
+  }
   jQ_line.append(
-    $('<td class="pilotReady"></td>').html('Нет')
+    $('<td class="pilotReady"></td>').html(str_pilotReady)
   );
 
   $('#fleet').append(jQ_line)
@@ -247,23 +256,36 @@ function logMessage(message) {
 }
 
 function amIReady() {
-  var block_ready = $('<span class="actionButton readyCheck">Я готов!</span></div>');
+  var times = 3, jQ_audio = $('<audio controls><source src="/audio/pizzicato.ogg" type="audio/ogg"></audio>').load();
+  function playSound() {
+    if (times > 0) {
+      jQ_audio.get(0).play();
+      times--;
+      setTimeout(playSound, 2500)
+    }
+  }
+  playSound();
+  var block_ready = $('<div class="tac"><p>ФК запрашивает вашу готовность!</p><span class="actionButton readyCheck">Я готов!</span></div>');
   $.fancybox(block_ready)
 }
 
 jQuery.fn.extend({
   blink: function(options) {
-    var oldColor = this.css('color');
-    if (!options.color) {
-      options.color = this.css('color')
-
+    var that = this, old_options = {};
+    if (!options) {
+      options = {}
     }
+    $.each(options, function(k){
+      old_options[k] = that.css(k)
+    });
+    options.opacity = 0.5;
+    old_options.opacity = 1;
     return this
-      .animate({opacity: 0.5, color: options.color}, 100)
+      .animate(options, 100)
       .animate({opacity: 1}, 100)
       .animate({opacity: 0.5}, 100)
       .animate({opacity: 1}, 100)
       .animate({opacity: 0.5}, 100)
-      .animate({opacity: 1, color: oldColor}, 100);
+      .animate(old_options, 100);
   }
 });

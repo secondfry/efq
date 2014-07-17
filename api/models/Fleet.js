@@ -35,6 +35,10 @@ module.exports = {
     pilotType: {
       type: 'string',
       required: true
+    },
+    pilotReady: {
+      type: 'string',
+      required: true
     }
     
   }

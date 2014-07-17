@@ -26,3 +26,4 @@ button { color: #222; background: #ddd; border: 1px solid #bbb; }
 
 #charname, #shiptype { font-weight: bold; }
 .ship, .pilotID, .disabled, .pilotFit, #fit-form { display: none; }
+.tac { text-align: center; }
