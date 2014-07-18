@@ -56,7 +56,7 @@ function checkQueue() {
         case 'queue':
           stringType = 'очереди в запас';
           break;
-        case 'main':
+        case 'mainfleet':
           stringType = 'основном флоте';
           break;
         case 'reserve':
@@ -91,8 +91,18 @@ function getQueue() {
   $.ajaxSetup({async: false});
   $.post('/queue/get', function(data){
     if (data.result == 'ok') {
-      setStatus(data)
-    } else if (data.result == 'fail') setStatus(data);
+      $.each(data.data, function(k, v){
+        socket.get('/pilot', {id: v.pilotID}, function(pilot){
+          addQueueLine(v, pilot);
+          addToObject(v);
+        });
+      });
+      setStatus('Получена очередь флота.');
+      status = true;
+    } else if (data.result == 'fail') {
+      setStatus('Очередь пуста!');
+      status = true;
+    }
     else status = failStatus();
   });
   $.ajaxSetup({async: true});
@@ -209,36 +219,43 @@ $(document).on('click', '#login_check', function(e){
   })
 });
 
+/**
+ * Хандлер для переноса в запас флота
+ */
+$(document).on('click', '.addToWait', function(){
+  var line = $(this).parents('.line');
+  queueUpdate(line, 'reserve');
+});
+
+/**
+ * Хандлер для переноса в основу
+ */
+$(document).on('click', '.addToFleet', function () {
+  var line = $(this).parents('.line');
+  CCPEVE.inviteToFleet(line.find('.eveID').html());
+  queueUpdate(line, 'mainfleet');
+});
+
+/**
+ * Хандлер для удаления из флота
+ */
+$(document).on('click', '.remove', function () {
+  var line = $(this).parents('.line');
+  queueRemove(line);
+});
+
 
 
 // Old
 /*
-  socket.get('/queue', function (data) {
-    if (data.action != 'denied') {
-      data.sort(function (a, b) {
-        var value_return = a.pilotShiptype - b.pilotShiptype;
-        if (value_return == 0)
-          value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
-        return value_return
-      });
-      $.each(data, function () {
-        addToObject(js_queue, this);
-        addQueueLine(this, true)
-      });
-    }
-  });
-
-  $(document).on('click', '.addToWait', function () {
-    var queueLine = $(this).parents('.queueLine');
-    if (queueLine.length) {
-      queueRemove(queueLine)
-      fleetJoin(queueLine, "reserve");
-    } else {
-      var fleetLine = $(this).parents('.fleetLine');
-      fleetRemove(fleetLine);
-      fleetJoin(fleetLine, "reserve")
-    }
-  });
+ data.sort(function (a, b) {
+ var value_return = getPilotTypeWeight(b.pilotType) - getPilotTypeWeight(a.pilotType);
+ if (value_return == 0)
+ value_return = a.pilotShiptype - b.pilotShiptype;
+ if (value_return == 0)
+ value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
+ return value_return
+ });
 
   $(document).on('click', '.readyAsk', function(){
     var fleetLine = $(this).parents('.fleetLine');
@@ -252,51 +269,6 @@ $(document).on('click', '#login_check', function(e){
       logMessage(data.message);
       $.fancybox.close()
     })
-  });
-
-  $(document).on('click', '.addToFleet', function () {
-    var queueLine = $(this).parents('.queueLine');
-    if (queueLine.length) {
-      fleetJoin(queueLine, "main");
-      queueRemove(queueLine);
-      CCPEVE.inviteToFleet(queueLine.find('.pilotID').html());
-    } else {
-      var fleetLine = $(this).parents('.fleetLine');
-      fleetRemove(fleetLine);
-      fleetJoin(fleetLine, "main");
-      CCPEVE.inviteToFleet(fleetLine.find('.pilotID').html());
-    }
-  });
-
-  $(document).on('click', '.remove', function () {
-    var queueLine = $(this).parents('.queueLine');
-    if (queueLine.length) {
-      queueRemove(queueLine)
-    } else {
-      var fleetLine = $(this).parents('.fleetLine');
-      fleetRemove(fleetLine);
-    }
-  });
-
-  socket.get('/fleet', function (data) {
-    if (data.action != 'denied') {
-      data.sort(function (a, b) {
-        var value_return = getPilotTypeWeight(b.pilotType) - getPilotTypeWeight(a.pilotType);
-        if (value_return == 0)
-          value_return = a.pilotShiptype - b.pilotShiptype;
-        if (value_return == 0)
-          value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
-        return value_return
-      });
-      $.each(data, function () {
-        if (this.pilotType == 'reserve') {
-          addToObject(js_reserve, this);
-        } else if (this.pilotType == 'main') {
-          addToObject(js_fleet, this);
-        }
-        addFleetLine(this, true)
-      });
-    }
   });
 
   $(document).on('click', '#FAQ', function () {

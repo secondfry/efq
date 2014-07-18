@@ -1,8 +1,37 @@
-<h2>Текущая очередь</h2>
-<div class="queue-data"></div>
-<table id="queue">
+<nav class="actionBar">
+  <h2>Текущая очередь в запас</h2>
+  <div class="actionData" id="queue-data"></div>
+</nav>
+<table class="queue-table" id="queue">
   <tr>
-    <th id="actions-active">Действия</th>
+    <th>Действия</th>
+    <th>Пилот</th>
+    <th>Шиптайп</th>
+    <th>Расположение</th>
+    <th>Дата</th>
+  </tr>
+</table>
+<nav class="actionBar">
+  <h2>Текущий запас</h2>
+  <div class="actionData" id="reserve-data"></div>
+</nav>
+<table class="queue-table" id="reserve">
+  <tr>
+    <th>Действия</th>
+    <th>Пилот</th>
+    <th>Шиптайп</th>
+    <th>Расположение</th>
+    <th>Дата</th>
+    <th>Готов?</th>
+  </tr>
+</table>
+<nav class="actionBar">
+  <h2>Текущий флот</h2>
+  <div class="actionData" id="mainfleet-data"></div>
+</nav>
+<table class="queue-table" id="mainfleet">
+  <tr>
+    <th>Действия</th>
     <th>Пилот</th>
     <th>Шиптайп</th>
     <th>Расположение</th>

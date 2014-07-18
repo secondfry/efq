@@ -25,30 +25,22 @@
     socket.on('queue', function queueEvent(data) {
       switch(data.action) {
         case 'join':
-          addQueueLine(data.queueLine, false);
-          addToObject(js_queue, data.queueLine);
+          socket.get('/pilot', {id: data.queueLine.pilotID}, function(pilot){
+            addQueueLine(data.queueLine, pilot);
+            addToObject(data.queueLine);
+          });
           break;
         case 'leave':
-          $('#' + pilotNameToId(data.pilotName)).remove();
-          removeFromObject(js_queue, data);
+          socket.get('/pilot', {id: data.pilotID}, function(pilot){
+            $('#' + pilotNameToId(pilot.name)).remove();
+            removeFromObject(data);
+          });
           break;
-      }
-    });
-
-    socket.on('fleet', function queueEvent(data) {
-      switch(data.action) {
-        case 'join':
-          addFleetLine(data.fleetLine, false);
-          if (data.fleetLine.pilotType == 'reserve') {
-            addToObject(js_reserve, data.fleetLine);
-          } else if (data.fleetLine.pilotType == 'main') {
-            addToObject(js_fleet, data.fleetLine);
-          }
-          break;
-        case 'leave':
-          $('#' + pilotNameToId(data.pilotName)).remove();
-          removeFromObject(js_fleet, data);
-          break;
+        case 'update':
+          socket.get('/log/justBody', {data: '#pilotID' + data.pilotID});
+          var jQ_line = $('#pilotID' + data.pilotID).parents('.line');
+          $('#' + data.queueType).append(jQ_line.clone());
+          jQ_line.remove()
       }
     });
 
