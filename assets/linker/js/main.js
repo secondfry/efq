@@ -89,7 +89,7 @@ if (window.CCPEVE && trusted === true) {
 
   $(document).on('click', '.readyCheck', function(){
     $.post('/ready/check', function (data){
-      logMessage(data.message)
+      logMessage(data.message);
       $.fancybox.close()
     })
   });
@@ -129,7 +129,11 @@ if (window.CCPEVE && trusted === true) {
         return value_return
       });
       $.each(data, function () {
-        addToObject(js_fleet, this);
+        if (this.pilotType == 'reserve') {
+          addToObject(js_reserve, this);
+        } else if (this.pilotType == 'main') {
+          addToObject(js_fleet, this);
+        }
         addFleetLine(this, true)
       });
     }
@@ -142,7 +146,7 @@ if (window.CCPEVE && trusted === true) {
   $(document).on('click', '#FAQ', function () {
     var jQ_list = $('<ol id="FAQ-list"></ol>');
     jQ_list.append('<li>Линкани свой фит в любой разрешенный канал.<br /><img src="/images/FAQ_1.png" class="FAQ-image" /></li>');
-    jQ_list.append('<li>Скопируй свое же сообщение.<br /><img src="/images/FAQ_2.png" class="FAQ-image" /></li>');
+    jQ_list.append('<li>Отправь свое сообщение и после этого скопируй строчку из чата.<br /><img src="/images/FAQ_2.png" class="FAQ-image" /></li>');
     jQ_list.append('<li>Вставь в поле для фита.<br /><img src="/images/FAQ_3.png" class="FAQ-image" /></li>');
     $.fancybox(jQ_list)
   });
@@ -177,5 +181,7 @@ if (window.CCPEVE && trusted === true) {
       setTimeout(function(){location.reload()}, 500)
     })
   });
+
+
 
 }

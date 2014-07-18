@@ -1,12 +1,8 @@
-<h2>Очередь во флот</h2>
 <% if (req.headers.eve_trusted === undefined) { %>
 <%- partial('partials/line-igb') %>
 <% } else if (req.headers.eve_trusted === 'No') { %>
 <%- partial('partials/line-trust') %>
 <% } else { %>
-<script>
-  var trusted = true
-</script>
 <%- partial('partials/block-main') %>
 <% if (req.session.level > 0) { %>
 <%- partial('partials/block-queue') %>

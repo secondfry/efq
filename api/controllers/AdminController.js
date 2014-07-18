@@ -91,7 +91,7 @@ var AdminController = {
           })
         })
       } else {
-        res.send({action: 'admin-check', message: 'Пользователь ' + user.pilotName + ' не найден!', data: 'user-not-found'});
+        res.send({action: 'admin-check', message: 'Пользователь ' + req.headers.eve_charname + ' не найден!', data: 'user-not-found'});
       }
     });
   }

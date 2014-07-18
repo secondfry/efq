@@ -10,12 +10,21 @@ module.exports = {
 
   attributes: {
 
+    eveID: {
+      type: 'integer',
+      required: true,
+      unique: true
+    },
     name: {
       type: 'string',
       required: true,
       unique: true
     },
-    logi: {
+    location: {
+      type: 'string',
+      required: true
+    },
+    logistics: {
       type: 'integer',
       decimal: true
     }

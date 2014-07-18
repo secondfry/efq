@@ -25,7 +25,6 @@
     socket.on('queue', function queueEvent(data) {
       switch(data.action) {
         case 'join':
-          socket.get('/log/index', {data: data.queueLine})
           addQueueLine(data.queueLine, false);
           addToObject(js_queue, data.queueLine);
           break;
@@ -40,7 +39,11 @@
       switch(data.action) {
         case 'join':
           addFleetLine(data.fleetLine, false);
-          addToObject(js_fleet, data.fleetLine);
+          if (data.fleetLine.pilotType == 'reserve') {
+            addToObject(js_reserve, data.fleetLine);
+          } else if (data.fleetLine.pilotType == 'main') {
+            addToObject(js_fleet, data.fleetLine);
+          }
           break;
         case 'leave':
           $('#' + pilotNameToId(data.pilotName)).remove();

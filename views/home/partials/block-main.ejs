@@ -7,11 +7,11 @@
       isInFleet = true;
       break;
     case 'queue':
-      positionMessage = '<p>Вы находитесь в очереди в запас флота. Позиция: ' + req.session.pilotPosition + '.</p>';
+      positionMessage = '<p>Вы находитесь в очереди в запас флота.</p>';
       isInQueue = true;
       break;
     case 'reserve':
-      positionMessage = '<p>Вы находитесь в очереди в основу флота. Позиция: ' + req.session.pilotPosition + '.</p>';
+      positionMessage = '<p>Вы находитесь в очереди в основу флота.</p>';
       isInQueue = true;
       break;
     case 'none':
@@ -61,6 +61,6 @@
   </div>
   <input id="fit-submit" type="submit" value="Встать в очередь" />
 </form>
-<p><span class="link<%= joinDisabled %>" id="queue-join">Регистрация в очередь</span></p>
-<p><span class="link<%= leaveDisabled %>" id="queue-leave">Покинуть очередь</span></p>
-<p>Когда подойдет твоя очередь, ФК попросит поставить "+" в канале <span class="link" id="channel">RAISA WL</span>. Подключись к нему!</p>
+<p><span class="actionButton<%= joinDisabled %>" id="queue-join">Регистрация в очередь</span></p>
+<p><span class="actionButton<%= leaveDisabled %>" id="queue-leave">Покинуть очередь</span></p>
+<p>Когда подойдет твоя очередь, ФК запросит потверждения твоей готовности через ингейм браузер - не закрывай его! Не забудьте также зайти в комнату ожидания ТС.</p>

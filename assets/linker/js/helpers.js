@@ -59,7 +59,7 @@ if(!Date.prototype.toUTCFormat){
 }
 
 function createCommonLine(line, lineClass, fixtime) {
-  var time = line.updatedAt.match(/([\w]{4})-([\w]{2})-([\w]{2})T([\w]{2}):([\w]{2}):([\w]{2})/);
+  var time = line.createdAt.match(/([\w]{4})-([\w]{2})-([\w]{2})T([\w]{2}):([\w]{2}):([\w]{2})/);
   if (fixtime) {
     time = new Date(new Date(time[1], time[2], time[3], time[4], time[5]).getTime() + 14400000); // FIXME 4 часа
   } else {
@@ -71,19 +71,6 @@ function createCommonLine(line, lineClass, fixtime) {
   jQ_line.append(
     $('<td class="pilotID"></td>').html(line.pilotID)
   );
-  jQ_actionCell = $('<td class="pilotActions"></td>').append(
-    $('<span class="actionButton addToWait"></span>').html('В запас')
-  );
-  jQ_actionCell.append(
-    $('<span class="actionButton readyAsk"></span>').html('Проверка')
-  );
-  jQ_actionCell.append(
-    $('<span class="actionButton addToFleet"></span>').html('Во флот')
-  );
-  jQ_actionCell.append(
-    $('<span class="actionButton remove"></span>').html('Прогнать')
-  );
-  jQ_line.append(jQ_actionCell);
   var jQ_pilot = $('<span class="link"></span>').html(line.pilotName).click(function(){
     if(window.CCPEVE) {
       CCPEVE.showInfo(1377, line.pilotID); // 1377 - Character
@@ -119,11 +106,37 @@ function createCommonLine(line, lineClass, fixtime) {
 
 function addQueueLine(line, fixtime) {
   var jQ_line = createCommonLine(line, 'queueLine', fixtime);
+
+  jQ_actionCell = $('<td class="pilotActions"></td>').append(
+    $('<span class="actionButton smallButton addToWait"></span>').html('В запас')
+  );
+  jQ_actionCell.append(
+    $('<span class="actionButton smallButton addToFleet"></span>').html('Во флот')
+  );
+  jQ_actionCell.append(
+    $('<span class="actionButton smallButton remove"></span>').html('Прогнать')
+  );
+  jQ_line.prepend(jQ_actionCell);
+
   $('#queue').append(jQ_line)
 }
 
 function addFleetLine(line, fixtime) {
   var jQ_line = createCommonLine(line, 'fleetLine', fixtime);
+
+  jQ_actionCell = $('<td class="pilotActions"></td>').append(
+    $('<span class="actionButton smallButton addToWait"></span>').html('В запас')
+  );
+  jQ_actionCell.append(
+    $('<span class="actionButton smallButton readyAsk"></span>').html('Проверка')
+  );
+  jQ_actionCell.append(
+    $('<span class="actionButton smallButton addToFleet"></span>').html('Во флот')
+  );
+  jQ_actionCell.append(
+    $('<span class="actionButton smallButton remove"></span>').html('Прогнать')
+  );
+  jQ_line.prepend(jQ_actionCell);
 
   var str_pilotType;
   switch(line.pilotType) {
@@ -245,6 +258,7 @@ function recalculateStats(datastore) {
   stats = '<p>Логистов: ' + datastore.Logistics.count + ' (' + datastore.Ships.Basilisk.count + 'B, ' + datastore.Ships.Scimitar.count + 'S).</p>';
   stats += '<p>Виндикаторов: ' + datastore.Close.count + '.</p>';
   stats += '<p>Снайперов: ' + datastore.Range.count + ' (' + datastore.Ships.Machariel.count + 'M, ' + datastore.Ships.Nightmare.count + 'N).</p>';
+  stats += '<p>Во флоте: ' + js_fleet.Ships.count + ' пилотов, в запасе: ' + js_reserve.Ships.count + ' пилотов</p>';
   $('.' + datastore.Type + '-data').html(stats)
 }
 

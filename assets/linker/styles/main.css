@@ -15,9 +15,10 @@ button { color: #222; background: #ddd; border: 1px solid #bbb; }
 #fit-wrapper { margin: 0.5em; background: #ddd; padding: 0.5em; }
 #fit { width: 100%; padding: 0; background: #ddd; color: #222; border: 0; }
 #fleet th, #fleet td, #queue th, #queue td { padding: 0.25em 0.5em; border: 1px #444 solid;}
-.actionButton { cursor: pointer; font-size: 0.8em; color: #222; background: #ddd; border: 1px solid #bbb; margin: 0.25em; padding: 0.25em 0.5em; display: inline-block; }
+.actionButton { cursor: pointer; color: #222; background: #ddd; border: 1px solid #bbb; margin: 0.25em; padding: 0.25em 0.5em; display: inline-block; }
 .actionButton:hover { background: #bbb; }
 .actionButton:active { background: #444; color: #ddd; }
+.smallButton { font-size: 0.8em; }
 .time { font-weight: bold; font-size: 0.8em; }
 
 #footer { margin: 1em 0 0 0; border-top: 1px solid #ddd; }
