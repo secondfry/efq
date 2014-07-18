@@ -1,30 +1,41 @@
 @font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 400; src: local('Ubuntu'), url(../../styles/Ubuntu.woff) format('woff'); }
 @font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 700; src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(../../styles/Ubuntu-Bold.woff) format('woff'); }
 html { font: 0.8em/1.231 'Ubuntu', sans-serif; background: #222; color: #ddd; }
-body { padding: 0 1em; }
+body { padding: 1em; }
 input[type=submit] { color: #222; background: #ddd; border: 1px solid #bbb; margin: 0.5em; padding: 0.1em 0.2em; }
 button { color: #222; background: #ddd; border: 1px solid #bbb; }
+a { color: #66c; }
+a:hover { text-decoration: none; }
+a:active { color: #c66; }
 
 #header { position: relative; }
+.header_inline { display: inline-block; margin: 0 10px 0 0; }
+#header_nav a { padding: 1em; }
 #login-div { position: absolute; top: 0; right: 0; }
 
 #main { }
 .link { cursor: pointer; text-decoration: underline; color: #66c; }
 .link:hover { text-decoration: none; }
 .link:active { color: #c66; }
-#fit-wrapper { margin: 0.5em; background: #ddd; padding: 0.5em; }
-#fit { width: 100%; padding: 0; background: #ddd; color: #222; border: 0; }
-#fleet th, #fleet td, #queue th, #queue td { padding: 0.25em 0.5em; border: 1px #444 solid;}
 .actionButton { cursor: pointer; color: #222; background: #ddd; border: 1px solid #bbb; margin: 0.25em; padding: 0.25em 0.5em; display: inline-block; }
 .actionButton:hover { background: #bbb; }
 .actionButton:active { background: #444; color: #ddd; }
+.actionBar {  margin: 1em 0; position: relative; }
+.actionBar h2 { display: inline-block; margin: 0 0.5em 0 0; }
+.actionBar .actionButton { position: absolute; top: -0.3em; left: 15em; }
+#fit_wrapper { margin: 0.5em; background: #ddd; padding: 0.5em; }
+#fit { width: 100%; padding: 0; background: #ddd; color: #222; border: 0; }
+#fleet th, #fleet td, #queue th, #queue td { padding: 0.25em 0.5em; border: 1px #444 solid;}
 .smallButton { font-size: 0.8em; }
 .time { font-weight: bold; font-size: 0.8em; }
+
+#messages_wrapper { font-size: 0.8em; border: 1px solid #444; padding: 1em }
+#messages_wrapper h2 { margin: 0.3em 0 0.5em; }
 
 #footer { margin: 1em 0 0 0; border-top: 1px solid #ddd; }
 
 #FAQ-list { padding: 0 0 0 1.5em; margin: 0; }
 
 #charname, #shiptype { font-weight: bold; }
-.ship, .pilotID, .disabled, .pilotFit, #fit-form { display: none; }
+.ship, .pilotID, #queue_join, #queue_leave, #queue_info, #fit_form, .pilotFit, #login_ask, #login_check { display: none; }
 .tac { text-align: center; }

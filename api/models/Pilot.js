@@ -27,6 +27,19 @@ module.exports = {
     logistics: {
       type: 'integer',
       decimal: true
+    },
+    token: {
+      type: 'string',
+      required: true
+    },
+    secret: {
+      type: 'string',
+      required: true
+    },
+    level: {
+      type: 'integer',
+      required: true,
+      decimal: true
     }
     
   }

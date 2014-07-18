@@ -1,0 +1,5 @@
+<% if (req.headers.eve_trusted === undefined) { %>
+<%- partial('partials/line-igb') %>
+<% } else if (req.headers.eve_trusted === 'No') { %>
+<%- partial('partials/line-trust') %>
+<% } %>

@@ -1,3 +1,44 @@
+/**
+ * Устанавливает статус пилота
+ * @param message Текст статуса
+ */
+function setStatus(message) {
+  $('#messages').prepend('<p><span class="time">[' + moment.utc().format('YYYY-MM-DD HH:mm') + ']: </span>' + message + '</p>');
+  $('#pilot_status').html(message)
+}
+
+/**
+ * Возвращает статус пилота
+ * @return string Текст статуса
+ */
+function getStatus() {
+  return $('#pilot_status').html()
+}
+
+/**
+ * Что-то пошло не так
+ * @return {boolean} Ложь.
+ */
+function failStatus() {
+  setStatus('Редис. Ананас. Изумруд. Свекла. Авокадо.');
+  return false;
+}
+
+/**
+ * Вычленяет DNA из переданной строки
+ * @param string Входящая строка
+ * @return string Фит в формате DNA
+ */
+function prepareFit(string) {
+  var retval = string.match(/<url=fitting:([^>]*)>/);
+  if (retval)
+    return retval[1];
+  else
+    return null;
+}
+
+
+// Old
 var js_queue = {
   Ships: {
     count: 0,
@@ -168,10 +209,6 @@ function addFleetLine(line, fixtime) {
 
 function pilotNameToId(pilotName) {
   return pilotName.split(' ').join('')
-}
-
-function prepareFit(textarea) {
-  return textarea.match(/<url=fitting:([^>]*)>/)[1]
 }
 
 function queueRemove(line) {

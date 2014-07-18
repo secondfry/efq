@@ -31,6 +31,7 @@ module.exports = function (grunt) {
     // jQuery, DNA to image, custom helpers
     'linker/js/jquery-1.11.1.min.js',
     'linker/js/fancybox/jquery.fancybox.pack.js',
+    'linker/js/moment-2.7.0.min.js',
     'linker/js/fuzzysteve.ship.js',
     'linker/js/helpers.js',
     // A simpler boilerplate library for getting you up and running w/ an

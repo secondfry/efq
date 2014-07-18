@@ -1,10 +1,37 @@
 var QueueController = {
 
+  checkType: function (req, res) {
+    Queue.findOneByPilotID(req.session.pilotID).done(function(err, queueLine){
+      if (err) res.send(err); else if (queueLine) {
+        req.session.queueType = queueLine.queueType;
+        req.session.category = queueLine.category;
+        res.send({action: 'queue-checktype', result: 'ok', queueType: queueLine.queueType, category: queueLine.category})
+      } else res.send({action: 'queue-checktype', result: 'fail'})
+    })
+  },
+
+  checkPosition: function (req, res) {
+    Queue.find({
+      queueType: req.session.queueType,
+      category: req.session.category
+    }).done(function(err, queue){
+      if (err) res.send(err); else if (queue) {
+        var i = 0, queueLength = queue.length, isFound = false;
+        while (i < queueLength) {
+          if (queue[i].pilotID == req.session.pilotID) {
+            isFound = true;
+            break;
+          }
+          i++;
+        }
+        if (isFound) res.send({action: 'queue-checktype', result: 'ok', position: i+1});
+        else res.send({action: 'queue-checkposition', result: 'fatal'})
+      } else res.send({action: 'queue-checkposition', result: 'fail'})
+    })
+  },
+
   join: function (req, res) {
-    var location, category, shiptype;
-    typeof req.headers.eve_stationname == 'undefined' ?
-      location = req.headers.eve_solarsystemname + ' - ' + req.headers.eve_constellationname + ' - ' + req.headers.eve_regionname :
-      location = req.headers.eve_stationname;
+    var category, shiptype;
     shiptype = ItemService.items[req.body.fit.match(/(^[^:]*):/)[1]].name;
     switch(shiptype) {
       case 'Vindicator':
@@ -22,49 +49,38 @@ var QueueController = {
         category = 'Other';
     }
     Queue.create({
-      pilotID: req.headers.eve_charid,
-      pilotName: req.headers.eve_charname,
-      pilotShiptype: shiptype,
-      pilotFit: req.body.fit,
-      pilotLocation: location,
-      category: category
+      pilotID: req.session.pilotID,
+      queueType: 'queue',
+      category: category,
+      shiptype: shiptype,
+      fit: req.body.fit,
+      ready: 'no'
     }).done(function(err, queueLine) {
-      if (err)
-        console.log(err);
-      if (queueLine) {
-        req.session.pilotQueue = "queue";
+      if (err) res.send(err); else if (queueLine) {
+        req.session.queueType = queueLine.queueType;
+        req.session.category = queueLine.category;
+        req.session.shiptype = queueLine.shiptype;
+        req.session.ready = queueLine.ready;
         sails.io.sockets.in('admin').emit('queue', {action: 'join', queueLine: queueLine});
-        PilotHistoryService.add(queueLine, "queue");
-        res.send({action: 'queue-joined', message: 'Вы попали в очередь в запас.'})
-      }
+        PilotHistoryService.add(queueLine, queueLine.queueType);
+        res.send({action: 'queue-join', result: 'ok'})
+      } else res.send({action: 'queue-join', result: 'fail'})
     });
   },
 
-  remove: function (req, res) {
+  leave: function (req, res) {
     Queue.destroy({
-      pilotName: req.body.pilotName
+      pilotID: req.session.pilotID
     }).done(function(err) {
-      if (err) {
-        console.log(err)
-      } else {
-        req.session.pilotQueue = "none";
-        sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotName: req.body.pilotName, pilotShiptype: req.body.pilotShiptype});
-        res.send({action: 'queue-left', message: 'Пилот ' + req.body.pilotName + ' покинул очередь в запас.'})
+      if (err) res.send(err); else {
+        req.session.queueType = null;
+        req.session.category = null;
+        req.session.shiptype = null;
+        req.session.ready = null;
+        sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotID: req.session.pilotID});
+        res.send({action: 'queue-leave', result: 'ok', pilotID: req.session.pilotID})
       }
     })
-  },
-
-  position: function (req, res) {
-    Queue.findOneByPilotName(req.body.pilotName).done(function(err, queueLine){
-      if (err)
-        console.log(err)
-      if (queueLine) {
-        var category = queueLine.category;
-        var position = PositionService.queue(req, res, category, req.headers.eve_charname);
-      } else {
-        res.send({action: 'queue-position', message: 'Пилот ' + req.body.pilotName + 'отсутствует в очереди в запас.'});
-      }
-    });
   }
 
 };

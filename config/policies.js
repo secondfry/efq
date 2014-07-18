@@ -13,23 +13,23 @@
 
 
 module.exports.policies = {
-  '*': ['checkBanList', 'checkSecret', 'setSessionPilot', 'setSessionPilotQueue'],
-  Capsuleer: {
-    '*': 'canInteractPilot'
-  },
-  Queue: {
-    '*': ['canInteractQueue'],
-    'create': 'checkFleetThere'
-  },
-  QueueController: {
-    '*': ['canInteractQueue'],
-    'join': 'checkFleetThere'
-  },
-  Admin: {
-    '*': 'canInteractAdmin'
-  },
-  Fleet: 'canInteractFleet',
-  FleetHistory: {
-    '*': 'canInteractFleet'
-  }
+  '*': ['setSession', 'checkBanList'],
+//  Capsuleer: {
+//    '*': 'canInteractPilot'
+//  },
+//  Queue: {
+//    '*': ['canInteractQueue'],
+//    'create': 'checkFleetThere'
+//  },
+//  QueueController: {
+//    '*': ['canInteractQueue'],
+//    'join': 'checkFleetThere'
+//  },
+//  Admin: {
+//    '*': 'canInteractAdmin'
+//  },
+//  Fleet: 'canInteractFleet',
+//  FleetHistory: {
+//    '*': 'canInteractFleet'
+//  }
 };

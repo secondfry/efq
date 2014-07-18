@@ -1,0 +1,17 @@
+<p>
+  Привет, <b><%= req.session.pilotName %></b>!<br />
+  Ты находишься в <b id="location"><%= req.session.location %></b> на корабле <b><%= req.headers.eve_shiptypename %></b> :)
+</p>
+<nav class="actionBar">
+  <h2>Очередь во флот</h2>
+  <span class="actionButton" id="queue_join">Регистрация в очередь</span>
+  <span class="actionButton" id="queue_leave">Покинуть очередь</span>
+</nav>
+<form id="fit_form" action="javascript:void(0)">
+  <label for="fit">Фит</label> <span class="link" id="FAQ">// а что делать-то?</span><br />
+  <div id="fit_wrapper">
+    <textarea id="fit" name="fit"></textarea>
+  </div>
+  <input id="fit_submit" type="submit" value="Встать в очередь" />
+</form>
+<p id="queue_info">Когда подойдет твоя очередь, ФК запросит потверждения твоей готовности через ингейм браузер - не закрывай его! Не забудьте также зайти в комнату ожидания ТС.</p>
