@@ -15,6 +15,7 @@ var PilotController = {
     var level;
     var data = JSON.parse(fs.readFileSync('./config/levelList.json'));
     level = data[req.session.pilotName];
+    if (!level) level = 0;
     Pilot.create({
       eveID: req.session.eveID,
       name: req.session.pilotName,
