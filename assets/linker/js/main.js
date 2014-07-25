@@ -143,7 +143,7 @@ $(document).on('click', '#queue_join', function() {
 });
 
 /**
- * Хандлер для отправки фита
+ * Хандлер для входа в очередь
  */
 $(document).on('submit', '#fit_form', function(e){
   e.preventDefault();
@@ -152,16 +152,20 @@ $(document).on('submit', '#fit_form', function(e){
   $.post('/pilot/locate', function(data){
     if (data.result == 'ok') {
       setStatus('Расположение установлено. Отправка фита.');
-      var fit = prepareFit($('#fit').val());
+      var
+        fit = prepareFit($('#fit').val()),
+        logistics = $('#logistics').val();
       if (fit) {
         $.post('/queue/join', {
-          fit: fit
+          fit: fit,
+          logistics: logistics
         }, function(data) {
           if (data.result == 'ok') {
             setStatus('Вы добавлены в очередь в запас!');
             status = true;
             checkQueue();
           }
+          else if (data.result == 'fail-logistics') setStatus('Пилоты кораблей Basilisk, Skimitar обязаны указать уровень навыка Logistics.');
           else if (data.result == 'fail') setStatus('Попадание в очередь в запас не удалось. Сообщаем -> Lenai Chelien.');
           else failStatus()
         })

@@ -7,6 +7,7 @@ button { color: #222; background: #ddd; border: 1px solid #bbb; }
 a { color: #66c; }
 a:hover { text-decoration: none; }
 a:active { color: #c66; }
+input, select, textarea { background: #ddd; color: #222; }
 
 #header { position: relative; }
 .header_inline { display: inline-block; margin: 0 10px 0 0; }
@@ -24,7 +25,7 @@ a:active { color: #c66; }
 .actionBar h2 { display: inline-block; margin: 0 0.5em 0 0; }
 .actionBar .actionButton, .actionBar .actionData { display: inline-block; }
 #fit_wrapper { margin: 0.5em; background: #ddd; padding: 0.5em; }
-#fit { width: 100%; padding: 0; background: #ddd; color: #222; border: 0; }
+#fit { width: 100%; padding: 0; border: 0; }
 .queue-table th, .queue-table td { padding: 0.25em 0.5em; border: 1px #444 solid;}
 .smallButton { font-size: 0.8em; }
 .time { font-weight: bold; font-size: 0.8em; }

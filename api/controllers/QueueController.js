@@ -44,6 +44,7 @@ var QueueController = {
       case 'Basilisk':
       case 'Scimitar':
         category = 'Logistics';
+        if (!req.body.logistics || req.body.logistics == 0) return res.send({action: 'queue-join', result: 'fail-logistics'});
         break;
       default:
         category = 'Other';
@@ -56,6 +57,7 @@ var QueueController = {
       category: category,
       shiptype: shiptype,
       fit: req.body.fit,
+      logistics: req.body.logistics,
       ready: 'idk'
     }).done(function(err, queueLine) {
       if (err) res.send(err); else if (queueLine) {

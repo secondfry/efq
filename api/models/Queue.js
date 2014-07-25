@@ -37,6 +37,10 @@ module.exports = {
       type: 'string',
       required: true
     },
+    logistics: {
+      type: 'integer',
+      required: true
+    },
     ready: {
       type: 'string',
       required: true

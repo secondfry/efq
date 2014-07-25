@@ -74,14 +74,24 @@ function addCommonCells(jQ_line, queueLine, pilot) {
   jQ_line.append($('<td class="pilotID"></td>').html(queueLine.pilotID).attr('id', 'pilotID' + queueLine.pilotID));
   jQ_line.append($('<td class="eveID"></td>').html(pilot.eveID));
   jQ_line.append($('<td class="fit"></td>').html(queueLine.fit));
+
   var jQ_pilot = $('<span class="link"></span>').html(pilot.name).click(function(){
     CCPEVE.showInfo(1377, pilot.eveID); // 1377 - Character
   });
   jQ_line.append($('<td class="name"></td>').html(jQ_pilot));
-  var jQ_fit = $('<span class="link"></span>').html(queueLine.shiptype).click(function(){
+
+  var js_shiptype = queueLine.shiptype;
+  switch(queueLine.shiptype) {
+    case 'Basilisk':
+    case 'Skimitar':
+      js_shiptype += ' (L' + queueLine.logistics + ')';
+      break;
+  }
+  var jQ_fit = $('<span class="link"></span>').html(js_shiptype).click(function(){
     CCPEVE.showFitting(queueLine.fit)
   });
   jQ_line.append($('<td class="shiptype"></td>').html(jQ_fit));
+
   jQ_line.append($('<td class="location"></td>').html(pilot.location));
   jQ_line.append($('<td class="createdAt"></td>').html(moment.utc(queueLine.createdAt).format('YYYY-MM-DD <b>HH:mm</b>')));
   return jQ_line
