@@ -83,7 +83,7 @@ var QueueController = {
             req.session.category = null;
             req.session.shiptype = null;
             req.session.ready = null;
-            sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotID: req.session.pilotID, queueLine: queueLine});
+            sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotID: pilotID, queueLine: queueLine});
             res.send({action: 'queue-leave', result: 'ok', pilotID: req.session.pilotID})
           }
         })
