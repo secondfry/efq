@@ -16,6 +16,9 @@
 
 module.exports = function (grunt) {
 
+  grunt.file.write('views/partials/scripts.ejs', '<!--SCRIPTS--><!--SCRIPTS END-->');
+  grunt.file.write('views/partials/styles.ejs', '<!--STYLES--><!--STYLES END-->');
+
   var cssFilesToInject = [
     'linker/styles/normalize-3.0.1.css',
     'linker/styles/main.css',

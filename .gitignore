@@ -47,3 +47,5 @@ config/local.js
 # Other
 config/levelList.json
 config/banList.json
+views/partials/styles.ejs
+views/partials/scripts.ejs
