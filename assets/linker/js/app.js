@@ -39,7 +39,6 @@
         case 'update':
           socket.get('/pilot', {id: data.pilotID}, function(pilot){
             $('#' + pilotNameToId(pilot.name)).remove();
-            console.log(data.queueLine.queueType);
             removeFromObject(data.queueLine);
             data.queueLine.queueType = data.queueType;
             addQueueLine(data.queueLine, pilot);

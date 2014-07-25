@@ -223,14 +223,14 @@ js_queue.reserve.Type = "reserve";
  */
 function addToObject(object) {
   var datastore = js_queue[object.queueType];
-  var shiptype = datastore.Ships[object.shiptype];
 
-  if (typeof shiptype == "undefined") {
-    shiptype = {
+  if (typeof datastore.Ships[object.shiptype] == "undefined") {
+    datastore.Ships[object.shiptype] = {
       count: 0,
       lines: []
     }
   }
+  var shiptype = datastore.Ships[object.shiptype];
 
   shiptype.count++;
   shiptype.lines.push(object);
