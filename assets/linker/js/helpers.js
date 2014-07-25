@@ -20,7 +20,7 @@ function getStatus() {
  * @return {boolean} Ложь.
  */
 function failStatus() {
-  setStatus('Редис. Ананас. Изумруд. Свекла. Авокадо.');
+  setStatus('Редис. Ананас. Изумруд. Свекла. Авокадо. Случилось что-то непривиденное. Сообщаем -> Lenai Chelien.');
   return false;
 }
 
@@ -105,12 +105,9 @@ function addQueueLine(line, pilot) {
     case 'reserve':
       var str_ready;
       switch(line.ready) {
-        case 'yes':
-          str_ready = 'Готов!';
-          break;
-        case 'no':
-          str_ready = 'Нет';
-          break;
+        case 'idk': str_ready = '<div class="tac">???</div>'; break;
+        case 'yes': str_ready = 'Готов!'; break;
+        case 'no': str_ready = 'Нет'; break;
       }
       jQ_line.append($('<td class="ready"></td>').html(str_ready));
   }
@@ -153,8 +150,28 @@ function queueUpdate(line, type) {
   });
 }
 
+/**
+ * Сортировка списка очередей по типу корабля -> времени в очереди
+ * @param data Список строк данных
+ * @return {*} Отсортированный список строк данных
+ */
+function queueSort(data) {
+  return data.sort(function (a, b) {
+    var criteriaArray = ['shiptype', 'createdAt'], criteria = '', value_return = 0;
+    while (criteriaArray.length > 0) {
+      criteria = criteriaArray.shift();
+      value_return = a[criteria] > b[criteria];
+      if (value_return != 0)
+        break
+    }
+    return value_return
+  })
+}
 
-// Old
+/**
+ * Мультимассив для подсчета кораблей на стороне клиента.
+ * @type {{queue: {Ships: {count: number, Basilisk: {count: number, lines: Array}, Scimitar: {count: number, lines: Array}, Vindicator: {count: number, lines: Array}, Machariel: {count: number, lines: Array}, Nightmare: {count: number, lines: Array}}, Logistics: {count: number}, Close: {count: number}, Range: {count: number}, Other: {count: number}}}}
+ */
 var js_queue = {
   queue: {
     Ships: {
@@ -200,6 +217,10 @@ js_queue.queue.Type = "queue";
 js_queue.mainfleet.Type = "mainfleet";
 js_queue.reserve.Type = "reserve";
 
+/**
+ * Добавление строки из базы данных в мультимассив
+ * @param object Строка из базы данных
+ */
 function addToObject(object) {
   var datastore = js_queue[object.queueType];
   var shiptype = datastore.Ships[object.shiptype];
@@ -232,13 +253,17 @@ function addToObject(object) {
   recalculateStats(datastore)
 }
 
-function removeFromObject(datastore, object) {
+/**
+ * Удаление из мультимассива строки из базы данных
+ * @param object Строка из базы данных
+ */
+function removeFromObject(object) {
   var datastore = js_queue[object.queueType];
   var shiptype = datastore.Ships[object.shiptype];
 
   shiptype.count--;
   $.each(shiptype.lines, function(k){
-    if (this.name == object.name) {
+    if (this.id == object.id) {
       shiptype.lines.splice(k);
     }
   });
@@ -262,6 +287,10 @@ function removeFromObject(datastore, object) {
   recalculateStats(datastore)
 }
 
+/**
+ * Пересчет статистики для ФК
+ * @param datastore Подмассив определенного типа из мультимассива
+ */
 function recalculateStats(datastore) {
   var full = datastore.Logistics.count + datastore.Close.count + datastore.Range.count + datastore.Other.count;
   var stats = '<span>Логи: ' + datastore.Logistics.count + ' (' + datastore.Ships.Basilisk.count + 'B, ' + datastore.Ships.Scimitar.count + 'S). ' +
@@ -272,26 +301,10 @@ function recalculateStats(datastore) {
   $('#' + datastore.Type + '-data').html(stats)
 }
 
-function getPilotTypeWeight(pilotType) {
-  switch(pilotType) {
-    case 'reserve':
-      return 1;
-    case 'mainfleet':
-      return 2;
-  }
-}
-
-var times = 3;
-function playSound() {
-  if (times > 0) {
-    $('#notification').get(0).play();
-    times--;
-    setTimeout(playSound, 2500)
-  }
-}
+/**
+ * Проверка готовности пилота - всплывающее окно
+ */
 function amIReady() {
-  times = 3;
-  playSound();
   var block_ready = $('<div class="tac"><p>ФК запрашивает вашу готовность!</p><span class="actionButton readyCheck">Я готов!</span></div>');
   $.fancybox(block_ready)
 }

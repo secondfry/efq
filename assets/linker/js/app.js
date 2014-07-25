@@ -33,14 +33,18 @@
         case 'leave':
           socket.get('/pilot', {id: data.pilotID}, function(pilot){
             $('#' + pilotNameToId(pilot.name)).remove();
-            removeFromObject(data);
+            removeFromObject(data.queueLine);
           });
           break;
         case 'update':
-          socket.get('/log/justBody', {data: '#pilotID' + data.pilotID});
-          var jQ_line = $('#pilotID' + data.pilotID).parents('.line');
-          $('#' + data.queueType).append(jQ_line.clone());
-          jQ_line.remove()
+          socket.get('/pilot', {id: data.pilotID}, function(pilot){
+            $('#' + pilotNameToId(pilot.name)).remove();
+            console.log(data.queueLine.queueType);
+            removeFromObject(data.queueLine);
+            data.queueLine.queueType = data.queueType;
+            addQueueLine(data.queueLine, pilot);
+            addToObject(data.queueLine);
+          });
       }
     });
 
@@ -49,8 +53,8 @@
     });
 
     socket.on('ready-check', function(data){
-      $('#' + pilotNameToId(data.pilotName)).find('.pilotReady').html('Готов!').blink({fontSize: '1.2em'});
-      logMessage('Пилот ' + data.pilotName + ' - готов!')
+      $('#' + pilotNameToId(data.pilotName)).find('.ready').html('Готов!').blink({fontSize: '1.2em'});
+      setStatus('Пилот ' + data.pilotName + ' - готов!')
     });
 
     ///////////////////////////////////////////////////////////

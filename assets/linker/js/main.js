@@ -91,6 +91,7 @@ function getQueue() {
   $.ajaxSetup({async: false});
   $.post('/queue/get', function(data){
     if (data.result == 'ok') {
+      queueSort(data.data);
       $.each(data.data, function(k, v){
         socket.get('/pilot', {id: v.pilotID}, function(pilot){
           addQueueLine(v, pilot);
@@ -182,6 +183,7 @@ $(document).on('submit', '#fit_form', function(e){
 $(document).on('click', '#queue_leave', function(){
   $.post('/queue/leave', function(data){
     if (data.result == 'ok') setStatus('Пилот ' + data.pilotID + ' успешно удален из очереди.');
+    else if (data.result == 'fatal') setStatus('Пилота ' + data.pilotID + ' не удалось удалить из очереди.');
     else failStatus()
   });
   $(this).hide();
@@ -228,6 +230,32 @@ $(document).on('click', '.addToWait', function(){
 });
 
 /**
+ * Хандлер для проверки пилота
+ */
+$(document).on('click', '.readyAsk', function(){
+  var
+    line = $(this).parents('.line'),
+    pilotName = line.find('.name span').html();
+  $.post('/ready/ask', {pilotName: pilotName}, function(data){
+    if (data.result == 'ok') setStatus(pilotName + ' - отправлен запрос на готовность.');
+    else if (data.result == 'fail') setStatus('Не было отправлено имя пилота на проверку.');
+    else failStatus()
+  })
+});
+
+/**
+ * Хандлер для отправки готовности
+ */
+$(document).on('click', '.readyCheck', function(){
+  $.post('/ready/check', function(data){
+    if (data.result == 'ok') setStatus('Вы подтвердили свою готовность.');
+    else if (data.result == 'fail') setStatus('Подтвердить готовность не удалось!');
+    else failStatus();
+    $.fancybox.close()
+  })
+});
+
+/**
  * Хандлер для переноса в основу
  */
 $(document).on('click', '.addToFleet', function () {
@@ -244,41 +272,20 @@ $(document).on('click', '.remove', function () {
   queueRemove(line);
 });
 
+/**
+ * Хандлер для FAQ
+ */
+$(document).on('click', '#FAQ', function () {
+  var jQ_list = $('<ol id="FAQ-list"></ol>');
+  jQ_list.append('<li>Линкани свой фит в любой разрешенный канал.<br /><img src="/images/FAQ_1.png" class="FAQ-image" /></li>');
+  jQ_list.append('<li>Отправь свое сообщение и после этого скопируй строчку из чата.<br /><img src="/images/FAQ_2.png" class="FAQ-image" /></li>');
+  jQ_list.append('<li>Вставь в поле для фита.<br /><img src="/images/FAQ_3.png" class="FAQ-image" /></li>');
+  $.fancybox(jQ_list)
+});
 
 
 // Old
 /*
- data.sort(function (a, b) {
- var value_return = getPilotTypeWeight(b.pilotType) - getPilotTypeWeight(a.pilotType);
- if (value_return == 0)
- value_return = a.pilotShiptype - b.pilotShiptype;
- if (value_return == 0)
- value_return = new Date(a.updatedAt) - new Date(b.updatedAt);
- return value_return
- });
-
-  $(document).on('click', '.readyAsk', function(){
-    var fleetLine = $(this).parents('.fleetLine');
-    $.post('/ready/ask', {pilotName: fleetLine.find('.pilotName span').html()}, function (data){
-      logMessage(data.message)
-    })
-  });
-
-  $(document).on('click', '.readyCheck', function(){
-    $.post('/ready/check', function (data){
-      logMessage(data.message);
-      $.fancybox.close()
-    })
-  });
-
-  $(document).on('click', '#FAQ', function () {
-    var jQ_list = $('<ol id="FAQ-list"></ol>');
-    jQ_list.append('<li>Линкани свой фит в любой разрешенный канал.<br /><img src="/images/FAQ_1.png" class="FAQ-image" /></li>');
-    jQ_list.append('<li>Отправь свое сообщение и после этого скопируй строчку из чата.<br /><img src="/images/FAQ_2.png" class="FAQ-image" /></li>');
-    jQ_list.append('<li>Вставь в поле для фита.<br /><img src="/images/FAQ_3.png" class="FAQ-image" /></li>');
-    $.fancybox(jQ_list)
-  });
-
   socket.get('/fleetHistory/check', function (data) {
     var string = '<p>' + data.message;
     if (data.data) {

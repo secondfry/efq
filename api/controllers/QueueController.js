@@ -56,7 +56,7 @@ var QueueController = {
       category: category,
       shiptype: shiptype,
       fit: req.body.fit,
-      ready: 'no'
+      ready: 'idk'
     }).done(function(err, queueLine) {
       if (err) res.send(err); else if (queueLine) {
         req.session.queueType = queueLine.queueType;
@@ -73,17 +73,21 @@ var QueueController = {
   leave: function (req, res) {
     var pilotID;
     req.body.pilotID ? pilotID = req.body.pilotID : pilotID = req.session.pilotID;
-    Queue.destroy({
-      pilotID: pilotID
-    }).done(function(err) {
-      if (err) res.send(err); else {
-        req.session.queueType = null;
-        req.session.category = null;
-        req.session.shiptype = null;
-        req.session.ready = null;
-        sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotID: req.session.pilotID});
-        res.send({action: 'queue-leave', result: 'ok', pilotID: req.session.pilotID})
-      }
+    Queue.findOneByPilotID(pilotID).done(function(err,queueLine){
+      if (err) res.send(err); else if (queueLine) {
+        Queue.destroy({
+          pilotID: pilotID
+        }).done(function(err) {
+          if (err) res.send(err); else {
+            req.session.queueType = null;
+            req.session.category = null;
+            req.session.shiptype = null;
+            req.session.ready = null;
+            sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotID: req.session.pilotID, queueLine: queueLine});
+            res.send({action: 'queue-leave', result: 'ok', pilotID: req.session.pilotID})
+          }
+        })
+      } else res.send({action: 'queue-leave', result: 'fatal'})
     })
   },
 
@@ -96,17 +100,22 @@ var QueueController = {
   },
 
   update: function (req, res) {
-    Queue.update({
-      id: req.body.pilotID
-    }, {
-      queueType: req.body.queueType
-    }).done(function(err, queueLine){
+    Queue.findOneByPilotID(req.body.pilotID).done(function(err,queueLine){
       if (err) res.send(err); else
       if (queueLine) {
-        sails.io.sockets.in('admin').emit('queue', {action: 'update', pilotID: req.body.pilotID, queueType: req.body.queueType});
-        res.send({action: 'queue-update', result: 'ok'});
-      } else
-      res.send({action: 'queue-update', result: 'fatal'})
+        var queueLine_old = queueLine;
+        Queue.update({
+          pilotID: req.body.pilotID
+        }, {
+          queueType: req.body.queueType
+        }).done(function(err, queueLine){
+          if (err) res.send(err); else
+          if (queueLine) {
+            sails.io.sockets.in('admin').emit('queue', {action: 'update', pilotID: req.body.pilotID, queueType: req.body.queueType, queueLine: queueLine_old});
+            res.send({action: 'queue-update', result: 'ok'});
+          } else res.send({action: 'queue-update', result: 'fatal'})
+        })
+      } else res.send({action: 'queue-update', result: 'fatal'})
     })
   }
 
