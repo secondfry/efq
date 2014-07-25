@@ -220,14 +220,14 @@ module.exports = function (grunt) {
     uglify: {
       dist: {
         src: ['.tmp/public/concat/production.js'],
-        dest: '.tmp/public/min/production.js'
+        dest: '.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.js'
       }
     },
 
     cssmin: {
       dist: {
         src: ['.tmp/public/concat/production.css'],
-        dest: '.tmp/public/min/production.css'
+        dest: '.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.css'
       }
     },
 
@@ -255,9 +255,9 @@ module.exports = function (grunt) {
           appRoot: '.tmp/public'
         },
         files: {
-          '.tmp/public/**/*.html': ['.tmp/public/min/production.js'],
-          'views/**/*.html': ['.tmp/public/min/production.js'],
-          'views/**/*.ejs': ['.tmp/public/min/production.js']
+          '.tmp/public/**/*.html': ['.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.js'],
+          'views/**/*.html': ['.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.js'],
+          'views/**/*.ejs': ['.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.js']
         }
       },
 
@@ -285,9 +285,9 @@ module.exports = function (grunt) {
           appRoot: '.tmp/public'
         },
         files: {
-          '.tmp/public/index.html': ['.tmp/public/min/production.css'],
-          'views/**/*.html': ['.tmp/public/min/production.css'],
-          'views/**/*.ejs': ['.tmp/public/min/production.css']
+          '.tmp/public/index.html': ['.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.css'],
+          'views/**/*.html': ['.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.css'],
+          'views/**/*.ejs': ['.tmp/public/min/production.<%= grunt.template.today("yyyymmddHHMM") %>.css']
         }
       },
 
