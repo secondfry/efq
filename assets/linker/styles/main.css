@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2014. Rustam @Second_Fry Gubaydullin
+ *
+ * This file is part of EVE Fleet Queue.
+ *
+ * EVE Fleet Queue is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * EVE Fleet Queue is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 @font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 400; src: local('Ubuntu'), url(../../styles/Ubuntu.woff) format('woff'); }
 @font-face { font-family: 'Ubuntu'; font-style: normal; font-weight: 700; src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(../../styles/Ubuntu-Bold.woff) format('woff'); }
 html { font: 0.8em/1.231 'Ubuntu', sans-serif; background: #222; color: #ddd; }

@@ -1,22 +1,28 @@
-/**
- * app.js
+/*
+ * Copyright (c) 2014. Rustam @Second_Fry Gubaydullin
  *
- * This file contains some conventional defaults for working with Socket.io + Sails.
- * It is designed to get you up and running fast, but is by no means anything special.
+ * This file is part of EVE Fleet Queue.
  *
- * Feel free to change none, some, or ALL of this file to fit your needs!
+ * EVE Fleet Queue is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * EVE Fleet Queue is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 (function (io) {
-
-  // as soon as this file is loaded, connect automatically, 
+  // as soon as this file is loaded, connect automatically,
   var socket = io.connect();
-  if (typeof console !== 'undefined') {
-    log('Connecting to Sails.js...');
-  }
+  log('Connecting to Sails.js...');
 
   socket.on('connect', function socketConnected() {
-
     // Listen for Comet messages from Sails
     socket.on('message', function messageReceived(message) {
       logMessage('New comet message received :: ', message)
@@ -56,40 +62,19 @@
       setStatus('Пилот ' + data.pilotName + ' - готов!')
     });
 
-    ///////////////////////////////////////////////////////////
-    // Here's where you'll want to add any custom logic for
-    // when the browser establishes its socket connection to 
-    // the Sails.js server.
-    ///////////////////////////////////////////////////////////
-    log(
-        'Socket is now connected and globally accessible as `socket`.\n' + 
-        'e.g. to send a GET request to Sails, try \n' + 
-        '`socket.get("/", function (response) ' +
-        '{ console.log(response); })`'
-    );
-    ///////////////////////////////////////////////////////////
-
-
+    log('Socket is now connected and globally accessible as `socket`.');
   });
 
-
-  // Expose connected `socket` instance globally so that it's easy
-  // to experiment with from the browser console while prototyping.
   window.socket = socket;
 
-
-  // Simple log function to keep the example simple
   function log () {
     if (typeof console !== 'undefined') {
       console.log.apply(console, arguments);
     }
   }
-  
 
 })(
-
   // In case you're wrapping socket.io to prevent pollution of the global namespace,
   // you can replace `window.io` with your own `io` here:
   window.io
-
 );

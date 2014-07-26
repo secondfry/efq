@@ -14,6 +14,6 @@
 
 module.exports.adapters = {
 
-  'default': 'mysql',
+  'default': 'mysql'
   // Setup in config/local.js
 };
