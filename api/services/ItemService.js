@@ -840,14 +840,6 @@ var ItemService = {
       "slot": "ship",
       "name": "Maulus"
     },
-    "610": {
-      "slot": "ship",
-      "name": "Wraith"
-    },
-    "611": {
-      "slot": "ship",
-      "name": "Specter"
-    },
     "613": {
       "slot": "ship",
       "name": "Devourer"
@@ -972,10 +964,6 @@ var ItemService = {
       "slot": "ship",
       "name": "Dominix"
     },
-    "647": {
-      "slot": "ship",
-      "name": "Eidolon"
-    },
     "648": {
       "slot": "ship",
       "name": "Badger"
@@ -1015,10 +1003,6 @@ var ItemService = {
     "657": {
       "slot": "ship",
       "name": "Iteron Mark V"
-    },
-    "658": {
-      "slot": "ship",
-      "name": "Visitant"
     },
     "670": {
       "slot": "ship",
@@ -2443,10 +2427,6 @@ var ItemService = {
     "3851": {
       "slot": "med",
       "name": "Micro Shield Extender II"
-    },
-    "3878": {
-      "slot": "ship",
-      "name": "Phantom"
     },
     "3887": {
       "slot": "low",
@@ -5110,7 +5090,7 @@ var ItemService = {
     },
     "9289": {
       "slot": "high",
-      "name": "Dual 650mm Carbine Repeating Howitzer I"
+      "name": "Dual 650mm Carbine Repeating Cannon I"
     },
     "9291": {
       "slot": "high",
@@ -5118,7 +5098,7 @@ var ItemService = {
     },
     "9293": {
       "slot": "high",
-      "name": "Dual 650mm Prototype Repeating Siege Cannon"
+      "name": "Dual 650mm Prototype Automatic Cannon"
     },
     "9327": {
       "slot": "high",
@@ -5126,7 +5106,7 @@ var ItemService = {
     },
     "9329": {
       "slot": "high",
-      "name": "800mm Heavy Carbine Repeating Howitzer I"
+      "name": "800mm Heavy Carbine Repeating Cannon I"
     },
     "9331": {
       "slot": "high",
@@ -5134,7 +5114,7 @@ var ItemService = {
     },
     "9333": {
       "slot": "high",
-      "name": "800mm Heavy Prototype Repeating Siege Cannon"
+      "name": "800mm Heavy Prototype Automatic Cannon"
     },
     "9367": {
       "slot": "high",
@@ -21030,15 +21010,15 @@ var ItemService = {
     },
     "32799": {
       "slot": "charge",
-      "name": "Tactical Laser S"
+      "name": "Orbital Laser S"
     },
     "32801": {
       "slot": "charge",
-      "name": "Tactical EMP S"
+      "name": "Orbital EMP S"
     },
     "32803": {
       "slot": "charge",
-      "name": "Tactical Hybrid S"
+      "name": "Orbital Hybrid S"
     },
     "32809": {
       "slot": "low",
@@ -21387,6 +21367,454 @@ var ItemService = {
     "33397": {
       "slot": "ship",
       "name": "Chremoas"
+    },
+    "33400": {
+      "slot": "high",
+      "name": "Bastion Module I"
+    },
+    "33440": {
+      "slot": "high",
+      "name": "'Arbalest' Rapid Heavy Missile Launcher I"
+    },
+    "33441": {
+      "slot": "high",
+      "name": "'Limos' Rapid Heavy Missile Launcher I"
+    },
+    "33442": {
+      "slot": "high",
+      "name": "'Malkuth' Rapid Heavy Missile Launcher I"
+    },
+    "33446": {
+      "slot": "high",
+      "name": "Caldari Navy Rapid Heavy Missile Launcher"
+    },
+    "33448": {
+      "slot": "high",
+      "name": "Rapid Heavy Missile Launcher I"
+    },
+    "33450": {
+      "slot": "high",
+      "name": "Rapid Heavy Missile Launcher II"
+    },
+    "33452": {
+      "slot": "high",
+      "name": "Domination Rapid Heavy Missile Launcher"
+    },
+    "33453": {
+      "slot": "high",
+      "name": "Dread Guristas Rapid Heavy Missile Launcher"
+    },
+    "33454": {
+      "slot": "high",
+      "name": "Estamel's Modified Rapid Heavy Missile Launcher"
+    },
+    "33455": {
+      "slot": "high",
+      "name": "Gotan's Modified Rapid Heavy Missile Launcher"
+    },
+    "33456": {
+      "slot": "high",
+      "name": "Hakim's Modified Rapid Heavy Missile Launcher"
+    },
+    "33457": {
+      "slot": "high",
+      "name": "Kaikka's Modified Rapid Heavy Missile Launcher"
+    },
+    "33458": {
+      "slot": "high",
+      "name": "Mizuro's Modified Rapid Heavy Missile Launcher"
+    },
+    "33459": {
+      "slot": "high",
+      "name": "Republic Fleet Rapid Heavy Missile Launcher"
+    },
+    "33461": {
+      "slot": "high",
+      "name": "Shaqil's Modified Rapid Heavy Missile Launcher"
+    },
+    "33462": {
+      "slot": "high",
+      "name": "Thon's Modified Rapid Heavy Missile Launcher"
+    },
+    "33463": {
+      "slot": "high",
+      "name": "Tobias' Modified Rapid Heavy Missile Launcher"
+    },
+    "33464": {
+      "slot": "high",
+      "name": "True Sansha Rapid Heavy Missile Launcher"
+    },
+    "33465": {
+      "slot": "high",
+      "name": "Vepas' Modified Rapid Heavy Missile Launcher"
+    },
+    "33466": {
+      "slot": "high",
+      "name": "YO-5000 Rapid Heavy Missile Launcher"
+    },
+    "33468": {
+      "slot": "ship",
+      "name": "Astero"
+    },
+    "33470": {
+      "slot": "ship",
+      "name": "Stratios"
+    },
+    "33472": {
+      "slot": "ship",
+      "name": "Nestor"
+    },
+    "33513": {
+      "slot": "ship",
+      "name": "Leopard"
+    },
+    "33553": {
+      "slot": "ship",
+      "name": "Stratios Emergency Responder"
+    },
+    "33569": {
+      "slot": "charge",
+      "name": "Snowball"
+    },
+    "33571": {
+      "slot": "charge",
+      "name": "Sodium Firework"
+    },
+    "33572": {
+      "slot": "charge",
+      "name": "Barium Firework"
+    },
+    "33573": {
+      "slot": "charge",
+      "name": "Copper Firework"
+    },
+    "33623": {
+      "slot": "ship",
+      "name": "Abaddon Tash-Murkon Edition"
+    },
+    "33625": {
+      "slot": "ship",
+      "name": "Abaddon Kador Edition"
+    },
+    "33627": {
+      "slot": "ship",
+      "name": "Rokh Nugoeihuvi Edition"
+    },
+    "33629": {
+      "slot": "ship",
+      "name": "Rokh Wiyrkomi Edition"
+    },
+    "33631": {
+      "slot": "ship",
+      "name": "Maelstrom Nefantar Edition"
+    },
+    "33633": {
+      "slot": "ship",
+      "name": "Maelstrom Krusual Edition"
+    },
+    "33635": {
+      "slot": "ship",
+      "name": "Hyperion Aliastra Edition"
+    },
+    "33637": {
+      "slot": "ship",
+      "name": "Hyperion Innerzone Shipping Edition"
+    },
+    "33639": {
+      "slot": "ship",
+      "name": "Omen Kador Edition"
+    },
+    "33641": {
+      "slot": "ship",
+      "name": "Omen Tash-Murkon Edition"
+    },
+    "33643": {
+      "slot": "ship",
+      "name": "Caracal Nugoeihuvi Edition"
+    },
+    "33645": {
+      "slot": "ship",
+      "name": "Caracal Wiyrkomi Edition"
+    },
+    "33647": {
+      "slot": "ship",
+      "name": "Stabber Nefantar Edition"
+    },
+    "33649": {
+      "slot": "ship",
+      "name": "Stabber Krusual Edition"
+    },
+    "33651": {
+      "slot": "ship",
+      "name": "Thorax Aliastra Edition"
+    },
+    "33653": {
+      "slot": "ship",
+      "name": "Thorax Innerzone Shipping Edition"
+    },
+    "33655": {
+      "slot": "ship",
+      "name": "Punisher Kador Edition"
+    },
+    "33657": {
+      "slot": "ship",
+      "name": "Punisher Tash-Murkon Edition"
+    },
+    "33659": {
+      "slot": "ship",
+      "name": "Merlin Nugoeihuvi Edition"
+    },
+    "33661": {
+      "slot": "ship",
+      "name": "Merlin Wiyrkomi Edition"
+    },
+    "33663": {
+      "slot": "ship",
+      "name": "Rifter Nefantar Edition"
+    },
+    "33665": {
+      "slot": "ship",
+      "name": "Rifter Krusual Edition"
+    },
+    "33667": {
+      "slot": "ship",
+      "name": "Incursus Aliastra Edition"
+    },
+    "33669": {
+      "slot": "ship",
+      "name": "Incursus Innerzone Shipping Edition"
+    },
+    "33671": {
+      "slot": "drone",
+      "name": "Heavy Hull Maintenance Bot I"
+    },
+    "33673": {
+      "slot": "ship",
+      "name": "Whiptail"
+    },
+    "33675": {
+      "slot": "ship",
+      "name": "Chameleon"
+    },
+    "33677": {
+      "slot": "ship",
+      "name": "Police Pursuit Comet"
+    },
+    "33681": {
+      "slot": "drone",
+      "name": "Gecko"
+    },
+    "33683": {
+      "slot": "ship",
+      "name": "Mackinaw ORE Development Edition"
+    },
+    "33685": {
+      "slot": "ship",
+      "name": "Orca ORE Development Edition"
+    },
+    "33687": {
+      "slot": "ship",
+      "name": "Rorqual ORE Development Edition"
+    },
+    "33689": {
+      "slot": "ship",
+      "name": "Iteron Inner Zone Shipping Edition"
+    },
+    "33691": {
+      "slot": "ship",
+      "name": "Tayra Wiyrkomi Edition"
+    },
+    "33693": {
+      "slot": "ship",
+      "name": "Mammoth Nefantar Edition"
+    },
+    "33695": {
+      "slot": "ship",
+      "name": "Bestower Tash-Murkon Edition"
+    },
+    "33697": {
+      "slot": "ship",
+      "name": "Prospect"
+    },
+    "33704": {
+      "slot": "drone",
+      "name": "Medium Hull Maintenance Bot I"
+    },
+    "33706": {
+      "slot": "drone",
+      "name": "Light Hull Maintenance Bot I"
+    },
+    "33708": {
+      "slot": "drone",
+      "name": "Heavy Hull Maintenance Bot II"
+    },
+    "33710": {
+      "slot": "drone",
+      "name": "Medium Hull Maintenance Bot II"
+    },
+    "33712": {
+      "slot": "drone",
+      "name": "Light Hull Maintenance Bot II"
+    },
+    "33762": {
+      "slot": "low",
+      "name": "QA Mining Laser Upgrade"
+    },
+    "33816": {
+      "slot": "ship",
+      "name": "Garmur"
+    },
+    "33818": {
+      "slot": "ship",
+      "name": "Orthrus"
+    },
+    "33820": {
+      "slot": "ship",
+      "name": "Barghest"
+    },
+    "33822": {
+      "slot": "low",
+      "name": "Omnidirectional Tracking Enhancer I"
+    },
+    "33824": {
+      "slot": "low",
+      "name": "Omnidirectional Tracking Enhancer II"
+    },
+    "33826": {
+      "slot": "med",
+      "name": "Sentient Omnidirectional Tracking Link"
+    },
+    "33828": {
+      "slot": "low",
+      "name": "Sentient Omnidirectional Tracking Enhancer"
+    },
+    "33830": {
+      "slot": "low",
+      "name": "Dread Guristas Omnidirectional Tracking Enhancer"
+    },
+    "33832": {
+      "slot": "low",
+      "name": "Imperial Navy Omnidirectional Tracking Enhancer"
+    },
+    "33834": {
+      "slot": "low",
+      "name": "Unit D-34343's Modified Omnidirectional Tracking Enhancer"
+    },
+    "33836": {
+      "slot": "low",
+      "name": "Unit F-435454's Modified Omnidirectional Tracking Enhancer"
+    },
+    "33838": {
+      "slot": "low",
+      "name": "Unit P-343554's Modified Omnidirectional Tracking Enhancer"
+    },
+    "33840": {
+      "slot": "low",
+      "name": "Unit W-634's Modified Omnidirectional Tracking Enhancer"
+    },
+    "33842": {
+      "slot": "low",
+      "name": "Federation Navy Drone Damage Amplifier"
+    },
+    "33844": {
+      "slot": "low",
+      "name": "Imperial Navy Drone Damage Amplifier"
+    },
+    "33846": {
+      "slot": "low",
+      "name": "Dread Guristas Drone Damage Amplifier"
+    },
+    "33848": {
+      "slot": "low",
+      "name": "Sentient Drone Damage Amplifier"
+    },
+    "33850": {
+      "slot": "med",
+      "name": "Federation Navy Drone Navigation Computer"
+    },
+    "33852": {
+      "slot": "med",
+      "name": "Sentient Drone Navigation Computer"
+    },
+    "33869": {
+      "slot": "ship",
+      "name": "Brutix Serpentis Edition"
+    },
+    "33871": {
+      "slot": "ship",
+      "name": "Cyclone Thukker Tribe Edition"
+    },
+    "33873": {
+      "slot": "ship",
+      "name": "Ferox Guristas Edition"
+    },
+    "33875": {
+      "slot": "ship",
+      "name": "Prophecy Blood Raiders Edition"
+    },
+    "33877": {
+      "slot": "ship",
+      "name": "Catalyst Serpentis Edition"
+    },
+    "33879": {
+      "slot": "ship",
+      "name": "Coercer Blood Raiders Edition"
+    },
+    "33881": {
+      "slot": "ship",
+      "name": "Cormorant Guristas Edition"
+    },
+    "33883": {
+      "slot": "ship",
+      "name": "Thrasher Thukker Tribe Edition"
+    },
+    "33890": {
+      "slot": "rig",
+      "name": "Small Transverse Bulkhead I"
+    },
+    "33892": {
+      "slot": "rig",
+      "name": "Small Transverse Bulkhead II"
+    },
+    "33894": {
+      "slot": "rig",
+      "name": "Medium Transverse Bulkhead I"
+    },
+    "33896": {
+      "slot": "rig",
+      "name": "Medium Transverse Bulkhead II"
+    },
+    "33898": {
+      "slot": "rig",
+      "name": "Large Transverse Bulkhead I"
+    },
+    "33900": {
+      "slot": "rig",
+      "name": "Large Transverse Bulkhead II"
+    },
+    "33902": {
+      "slot": "rig",
+      "name": "Capital Transverse Bulkhead I"
+    },
+    "33904": {
+      "slot": "rig",
+      "name": "Capital Transverse Bulkhead II"
+    },
+    "33915": {
+      "slot": "med",
+      "name": "Medium Micro Jump Drive"
+    },
+    "33981": {
+      "slot": "low",
+      "name": "Limited Hyperspatial Accelerator"
+    },
+    "33983": {
+      "slot": "low",
+      "name": "Experimental Hyperspatial Accelerator"
+    },
+    "33985": {
+      "slot": "low",
+      "name": "Prototype Hyperspatial Accelerator"
     }
   }
 
