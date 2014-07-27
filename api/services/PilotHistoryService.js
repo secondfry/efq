@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014. Rustam @Second_Fry Gubaydullin
+ * Copyright (c) 2014. Rustam @Second_Fry Gubaydullin, RAISA Incursions.
  *
  * This file is part of EVE Fleet Queue.
  *
