@@ -17,7 +17,7 @@
  * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function updateCookie(req, cookie, expires) {
+function updateCookie(req, res, cookie, expires) {
   var
     bcrypt = require('bcrypt-nodejs'),
     userCookie = {};
@@ -29,8 +29,8 @@ function updateCookie(req, cookie, expires) {
 
 module.exports = function update (req, res, next) {
   if (req.cookies) {
-    if (typeof req.cookies.check == 'string') updateCookie(req, 'check', false);
-    if (typeof req.cookies.ask == 'string') updateCookie(req, 'ask', true);
+    if (typeof req.cookies.check == 'string') updateCookie(req, res, 'check', false);
+    if (typeof req.cookies.ask == 'string') updateCookie(req, res, 'ask', true);
   }
   next();
 };
