@@ -21,7 +21,7 @@ var QueueController = {
 
   checkType: function (req, res) {
     Queue.findOneByPilotID(req.session.pilotID).done(function(err, queueLine){
-      if (err) res.send(err); else if (queueLine) {
+      if (err) res.serverError(err); else if (queueLine) {
         req.session.queueType = queueLine.queueType;
         req.session.category = queueLine.category;
         res.send({action: 'queue-checktype', result: 'ok', queueType: queueLine.queueType, category: queueLine.category})
@@ -34,7 +34,7 @@ var QueueController = {
       queueType: req.session.queueType,
       category: req.session.category
     }).done(function(err, queue){
-      if (err) res.send(err); else if (queue) {
+      if (err) res.serverError(err); else if (queue) {
         var i = 0, queueLength = queue.length, isFound = false;
         while (i < queueLength) {
           if (queue[i].pilotID == req.session.pilotID) {
@@ -79,7 +79,7 @@ var QueueController = {
       logistics: req.body.logistics,
       ready: 'idk'
     }).done(function(err, queueLine) {
-      if (err) res.send(err); else if (queueLine) {
+      if (err) res.serverError(err); else if (queueLine) {
         req.session.queueType = queueLine.queueType;
         req.session.category = queueLine.category;
         req.session.shiptype = queueLine.shiptype;
@@ -95,11 +95,11 @@ var QueueController = {
     var pilotID;
     req.body.pilotID ? pilotID = req.body.pilotID : pilotID = req.session.pilotID;
     Queue.findOneByPilotID(pilotID).done(function(err,queueLine){
-      if (err) res.send(err); else if (queueLine) {
+      if (err) res.serverError(err); else if (queueLine) {
         Queue.destroy({
           pilotID: pilotID
         }).done(function(err) {
-          if (err) res.send(err); else {
+          if (err) res.serverError(err); else {
             req.session.queueType = null;
             req.session.category = null;
             req.session.shiptype = null;
@@ -114,7 +114,7 @@ var QueueController = {
 
   get: function (req, res) {
     Queue.find().done(function(err, queue){
-      if (err) res.send(err); else
+      if (err) res.serverError(err); else
       if (queue) res.send({action: 'queue-get', result: 'ok', data: queue}); else
       res.send({action: 'queue-get', result: 'fail'})
     })
@@ -122,7 +122,7 @@ var QueueController = {
 
   update: function (req, res) {
     Queue.findOneByPilotID(req.body.pilotID).done(function(err,queueLine){
-      if (err) res.send(err); else
+      if (err) res.serverError(err); else
       if (queueLine) {
         var queueLine_old = queueLine;
         Queue.update({
@@ -130,7 +130,7 @@ var QueueController = {
         }, {
           queueType: req.body.queueType
         }).done(function(err, queueLine){
-          if (err) res.send(err); else
+          if (err) res.serverError(err); else
           if (queueLine) {
             sails.io.sockets.in('admin').emit('queue', {action: 'update', pilotID: req.body.pilotID, queueType: req.body.queueType, queueLine: queueLine_old});
             res.send({action: 'queue-update', result: 'ok'});

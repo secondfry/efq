@@ -21,7 +21,7 @@ var PilotController = {
 
   check: function(req, res) {
     Pilot.findOneByEveID(req.session.eveID).done(function(err, pilot){
-      if (err) res.send(err); else if (pilot) {
+      if (err) res.serverError(err); else if (pilot) {
         req.session.pilotID = pilot.id;
         res.send({action: 'pilot-check', result: 'ok'})
       } else res.send({action: 'pilot-check', result: 'fail'})
@@ -43,7 +43,7 @@ var PilotController = {
       secret: uuid.v4(),
       level: level
     }).done(function(err, pilot) {
-      if (err) res.send(err); else if (pilot) {
+      if (err) res.serverError(err); else if (pilot) {
         req.session.pilotID = pilot.id;
         res.send({action: 'pilot-add', result: 'ok'})
       } else res.send({action: 'pilot-add', result: 'fatal'})
@@ -74,7 +74,7 @@ var PilotController = {
 
   checkLogin: function(req, res) {
     Pilot.findOneById(req.session.pilotID).done(function(err, user){
-      if (err) res.send(err); else
+      if (err) res.serverError(err); else
       if (user.token == 'not-a-token') res.send({action: 'pilot-checkLogin', result: 'fail', message: 'Сначала получите токен, а уже потом подтверждайте его!'}); else
       if (user) {
         var
@@ -121,7 +121,7 @@ var PilotController = {
     }, {
       location: location
     }).done(function(err, pilot){
-      if (err) res.send(err); else if (pilot) {
+      if (err) res.serverError(err); else if (pilot) {
         req.session.location = location;
         res.send({action: 'pilot-locate', result: 'ok'})
       } else res.send({action: 'pilot-locate', result: 'fail'})

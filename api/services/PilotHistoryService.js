@@ -26,11 +26,7 @@ var PilotHistoryService = {
       pilotFit: line.pilotFit,
       historyType: historyType
     }).done(function(err, pilotHistoryLine){
-      if (err) {
-        console.log(err)
-      } else {
-        console.log('#' + pilotHistoryLine.id + ': ' + pilotHistoryLine.pilotName + ' on ' + pilotHistoryLine.pilotShiptype + ' in ' + pilotHistoryLine.historyType)
-      }
+      if (err) res.serverError(err); else console.log('#' + pilotHistoryLine.id + ': ' + pilotHistoryLine.pilotName + ' on ' + pilotHistoryLine.pilotShiptype + ' in ' + pilotHistoryLine.historyType)
     })
   }
 

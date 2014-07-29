@@ -33,7 +33,7 @@ var ReadyController = {
     }, {
       ready: "yes"
     }).done(function (err, queueLine){
-      if (err) res.send(err); else if (queueLine) res.send({action: 'ready-check', result: 'ok'}); else res.send({action: 'ready-check', result: 'fail'})
+      if (err) res.serverError(err); else if (queueLine) res.send({action: 'ready-check', result: 'ok'}); else res.send({action: 'ready-check', result: 'fail'})
     });
   }
 
