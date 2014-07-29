@@ -17,6 +17,22 @@
  * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+function getUserKeyIn(req, cookie) {
+  var
+    bcrypt = require('bcrypt-nodejs'),
+    userKey = '';
+  if (req.cookies[cookie]) {
+    for (key in req.cookies[cookie]) {
+      if (bcrypt.compareSync(req.session.pilotName, key)) {
+        userKey = key;
+        break;
+      }
+    }
+  }
+  if (userKey == '') userKey = bcrypt.hashSync(req.session.pilotName);
+  return userKey;
+}
+
 var PilotController = {
 
   check: function(req, res) {
@@ -65,8 +81,15 @@ var PilotController = {
     }, {
       token: uuid.v4()
     }).done(function(err, user){
-      if(err) res.send(err); else if (user) {
-        res.cookie('ask', user[0].token);
+      if (err) res.serverError(err); else if (user) {
+        var
+          bcrypt = require('bcrypt-nodejs'),
+          userCookie = {},
+          userKey = getUserKeyIn(req, 'ask');
+        if (req.cookies.ask) userCookie = req.cookies.ask;
+        userCookie[userKey] = bcrypt.hashSync(user[0].token);
+        console.log(userCookie);
+        res.cookie('ask', userCookie);
         res.send({action: 'pilot-askLogin', result: 'ok', token: user[0].token});
       } else res.send({action: 'pilot-askLogin', result: 'fatal'})
     })
@@ -92,18 +115,27 @@ var PilotController = {
             data += chunk;
           });
           response.on('end', function(){
-            var matches, isAuthDone = false;
+            var
+              matches,
+              isAuthDone = false,
+              bcrypt = require('bcrypt-nodejs'),
+              userKeyAsk = getUserKeyIn(req, 'ask');
             regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
             while((matches = regexp.exec(data)) !== null) {
-              if(token == matches[2] && req.cookies.ask == matches[2]) {
+              if(token == matches[2] && bcrypt.compareSync(matches[2], req.cookies.ask[userKeyAsk])) {
                 isAuthDone = true;
                 break;
               }
             }
             if (isAuthDone == true) {
+              var
+                userCookie = {},
+                userKeyCheck = getUserKeyIn(req, 'check');
+              if (req.cookies.check) userCookie = req.cookies.check;
+              userCookie[userKeyCheck] = bcrypt.hashSync(secret);
               req.session.level = level;
               req.session.secret = secret;
-              res.cookie('check', secret, { expires: new Date(2100, 1, 1) });
+              res.cookie('check', userCookie, { expires: new Date(2100, 1, 1) });
               res.send({action: 'pilot-checkLogin', result: 'ok'});
             } else res.send({action: 'pilot-checkLogin', result: 'fail', message: 'Токен не найден в чате.'});
           })
