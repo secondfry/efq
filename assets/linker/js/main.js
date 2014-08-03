@@ -168,7 +168,7 @@ $(document).on('submit', '#fit_form', function(e){
   e.preventDefault();
   var status = false;
   $.ajaxSetup({async: false});
-  $.post('/pilot/locate', function(data){
+  $.post('/pilot/locate', function(data){ if (checkData(data)) {
     if (data.result == 'ok') {
       setStatus('Расположение установлено. Отправка фита.');
       var
@@ -178,7 +178,7 @@ $(document).on('submit', '#fit_form', function(e){
         $.post('/queue/join', {
           fit: fit,
           logistics: logistics
-        }, function(data) {
+        }, function(data){
           if (data.result == 'ok') {
             setStatus('Вы добавлены в очередь в запас!');
             status = true;
@@ -191,7 +191,7 @@ $(document).on('submit', '#fit_form', function(e){
       } else setStatus('Вы забыли линкануть фит!')
     } else if (data.result == 'fail') setStatus('Вас не получается обнаружить на карте. Фит не отправлен.');
     else failStatus()
-  });
+  }});
   $.ajaxSetup({async: false});
   if (status == true) {
     $(this).hide();
@@ -204,11 +204,11 @@ $(document).on('submit', '#fit_form', function(e){
  * Хандлер для выхода из очереди
  */
 $(document).on('click', '#queue_leave', function(){
-  $.post('/queue/leave', function(data){
-    if (data.result == 'ok') setStatus('Пилот ' + data.pilotID + ' успешно удален из очереди.');
-    else if (data.result == 'fatal') setStatus('Пилота ' + data.pilotID + ' не удалось удалить из очереди.');
-    else failStatus()
-  });
+  $.post('/queue/leave', function(data){ if (checkData(data)) {
+      if (data.result == 'ok') setStatus('Пилот ' + data.pilotID + ' успешно удален из очереди.');
+      else if (data.result == 'fatal') setStatus('Пилота ' + data.pilotID + ' не удалось удалить из очереди.');
+      else failStatus()
+  }});
   $(this).hide();
   $('#queue_info').hide();
   $('#queue_join').show()
@@ -219,13 +219,13 @@ $(document).on('click', '#queue_leave', function(){
  */
 $(document).on('click', '#login_ask', function(e){
   e.preventDefault();
-  $.post('/pilot/askLogin', function(data){
+  $.post('/pilot/askLogin', function(data){ if (checkData(data)) {
     if (data.result == 'ok') {
       setStatus('Вам выдан токен. Отправьте его на канал RAISA Shield и, как только он появится на evelocal.com, делайте проверку токена.');
       CCPEVE.sendMail(1, 'Your token', 'Enter it to RAISA Shield channel and wait for evelocal.com to get that message.\n\n' + data.token);
     } else if (data.result == 'fatal') setStatus('Получить токен не удалось. Сообщаем -> Lenai Chelien.');
     else failStatus()
-  })
+  }})
 });
 
 /**
@@ -233,7 +233,7 @@ $(document).on('click', '#login_ask', function(e){
  */
 $(document).on('click', '#login_check', function(e){
   e.preventDefault();
-  $.post('/pilot/checkLogin', function(data){
+  $.post('/pilot/checkLogin', function(data){ if (checkData(data)) {
     if (data.result == 'ok') {
       setStatus('Вы успешно авторизовались! Страница перезагрузится автоматически через 3 секунды.');
       CCPEVE.sendMail(1, 'Welcome', 'You are inside!');
@@ -241,7 +241,7 @@ $(document).on('click', '#login_check', function(e){
     } else if (data.result == 'fail') setStatus(data.message);
     else if (data.result == 'fatal') setStatus('Пользователь не найден. Сообщаем -> Lenai Chelien.');
     else failStatus()
-  })
+  }})
 });
 
 /**
@@ -283,8 +283,8 @@ $(document).on('click', '.readyCheck', function(){
  */
 $(document).on('click', '.addToFleet', function () {
   var line = $(this).parents('.line');
-  CCPEVE.inviteToFleet(line.find('.eveID').html());
-  queueUpdate(line, 'mainfleet');
+  if (queueUpdate(line, 'mainfleet'))
+    CCPEVE.inviteToFleet(line.find('.eveID').html());
 });
 
 /**

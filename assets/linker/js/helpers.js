@@ -23,7 +23,8 @@
  */
 function setStatus(message) {
   $('#messages').prepend('<p><span class="time">[' + moment.utc().format('YYYY-MM-DD HH:mm') + ']: </span>' + message + '</p>');
-  $('#pilot_status').html(message)
+  $('#pilot_status').html(message);
+  return true
 }
 
 /**
@@ -38,8 +39,9 @@ function getStatus() {
  * Что-то пошло не так
  * @return {boolean} Ложь.
  */
-function failStatus() {
-  setStatus('Редис. Ананас. Изумруд. Свекла. Авокадо. Случилось что-то непривиденное. Сообщаем -> Lenai Chelien.');
+function failStatus(message) {
+  if (!message) message = 'Редис. Ананас. Изумруд. Свекла. Авокадо. Случилось что-то непривиденное. Сообщаем -> Lenai Chelien.';
+  setStatus(message);
   return false;
 }
 
@@ -158,11 +160,11 @@ function pilotNameToId(pilotName) {
  */
 function queueRemove(line) {
   var pilotName = line.find('.name span').html();
-  socket.post('/queue/leave', {pilotID: line.find('.pilotID').html()}, function(data){
+  $.post('/queue/leave', {pilotID: line.find('.pilotID').html()}, function(data){ if (checkData(data)) {
     if (data.result == 'ok') setStatus('Пилот ' + pilotName + ' успешно покинул флот.');
     else if (data.result == 'fatal') setStatus('Пилота ' + pilotName + ' не удалось удалить из флота. Сообщаем -> Lenai Chelien.');
     else failStatus()
-  })
+  }})
 }
 
 /**
@@ -172,11 +174,11 @@ function queueRemove(line) {
  */
 function queueUpdate(line, type) {
   var pilotName = line.find('.name span').html();
-  socket.post('/queue/update', {pilotID: line.find('.pilotID').html(), queueType: type}, function(data) {
-    if (data.result == 'ok') setStatus('Пилот ' + pilotName + ' успешно перенесен.');
-    else if (data.result == 'fatal') setStatus('Пилот ' + pilotName + ' не удалось перенести. Сообщаем -> Lenai Chelien.');
-    else failStatus()
-  });
+  $.post('/queue/update', {pilotID: line.find('.pilotID').html(), queueType: type}, function(data){ if (checkData(data)) {
+    if (data.result == 'ok') return setStatus('Пилот ' + pilotName + ' успешно перенесен.');
+    else if (data.result == 'fatal') return failStatus('Пилот ' + pilotName + ' не удалось перенести. Сообщаем -> Lenai Chelien.');
+    else return failStatus()
+  }})
 }
 
 /**
@@ -336,4 +338,14 @@ function recalculateStats(datastore) {
 function amIReady() {
   var block_ready = $('<div class="tac"><p>ФК запрашивает вашу готовность!</p><span class="actionButton readyCheck">Я готов!</span></div>');
   $.fancybox(block_ready)
+}
+
+function checkData(data) {
+  var status = true;
+  if (data.action == 'checkPilotID' && data.result == 'fail') {
+    setStatus('Сессия не установлена, попробуйте вновь после перезагрузки страницы.');
+    setTimeout(function(){location.reload()}, 3000);
+    status = false
+  }
+  return status;
 }

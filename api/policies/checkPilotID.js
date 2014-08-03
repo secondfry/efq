@@ -18,16 +18,7 @@
  */
 
 module.exports = function setSessionPilot (req, res, next) {
-  if (req.session.isSet == undefined || req.session.isSet == false) {
-    if (req.headers.eve_trusted == "Yes") {
-      typeof req.headers.eve_stationname == 'undefined' ?
-        location = req.headers.eve_solarsystemname + ' - ' + req.headers.eve_constellationname + ' - ' + req.headers.eve_regionname :
-        location = req.headers.eve_stationname;
-      req.session.eveID = req.headers.eve_charid;
-      req.session.pilotName = req.headers.eve_charname;
-      req.session.location = location;
-      req.session.isSet = true;
-      next()
-    } else res.view('outside/index')
+  if (!req.session || !req.session.pilotID) {
+    res.send({action: 'checkPilotID', result: 'fail'})
   } else next()
 };
