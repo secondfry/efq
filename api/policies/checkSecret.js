@@ -18,7 +18,7 @@
  */
 
 module.exports = function checkSecret (req, res, next) {
-  if (req.session.level == undefined && req.cookies.check) {
+  if (req.session.level == undefined && req.cookies && req.cookies.check) {
     Pilot.findOneByEveID(req.session.eveID).done(function(err, user){
       if (err) res.serverError(err); else if (user) {
         var
