@@ -20,40 +20,50 @@
 var FleetHistoryController = {
 
   check: function (req, res) {
-    FleetHistory.findOneByIsEnded('false').exec(function (err, fleetHistoryLine) {
-      if (err) res.serverError(err); else if (fleetHistoryLine) {
-        res.send({message: 'There is active fleet.', data: fleetHistoryLine})
-      } else {
-        res.send({message: 'There is no active fleet.'})
-      }
-    })
+    var fleetHistoryLine = FleetHistoryService.getNotEnded(res);
+    if (fleetHistoryLine) {
+      return res.send({message: 'There is active fleet.', data: fleetHistoryLine});
+    }
+
+    return res.send({message: 'There is no active fleet.'});
   },
 
   end: function (req, res) {
-    FleetHistory.update({
-      FCName: req.body.FCName
-    }, {
-      isEnded: true
-    }).exec(function (err, fleetHistoryLine) {
-      if (err) res.serverError(err); else res.send({message: 'Fleet ended.', data: fleetHistoryLine})
-    });
+    var
+      query = {
+        FCName: req.body.FCName
+      },
+      data = {
+        isEnded: true
+      };
+    return FleetHistory
+      .update(query, data)
+      .then(
+        function(fleetHistoryLine) {
+          return res.send({message: 'Fleet ended.', data: fleetHistoryLine});
+        }
+      )
+      .catch(res.serverError);
   },
 
   start: function (req, res) {
-    FleetHistory.findOneByIsEnded('false').exec(function (err, fleetHistoryLine) {
-      if (err)
-        console.log(err);
-      if (fleetHistoryLine) {
-        res.send({message: 'You cant start fleet - there is one active already.', data: fleetHistoryLine})
-      } else {
-        FleetHistory.create({
-          FCName: req.body.FCName,
-          isEnded: 'false'
-        }).exec(function (err, fleetHistoryLine) {
-          if (err) res.serverError(err); else res.send({message: 'Fleet started.', data: fleetHistoryLine})
-        })
-      }
-    })
+    var fleetHistoryLine = FleetHistoryService.getNotEnded(res);
+    if (fleetHistoryLine) {
+      return res.send({message: 'You can\'t start fleet - there is one active already.', data: fleetHistoryLine});
+    }
+
+    var data = {
+      FCName: req.body.FCName,
+      isEnded: 'false'
+    };
+    return FleetHistory
+      .create(data)
+      .then(
+        function(fleetHistoryLine){
+          return res.send({message: 'Fleet started.', data: fleetHistoryLine});
+        }
+      )
+      .catch(res.serverError);
   }
 
 };

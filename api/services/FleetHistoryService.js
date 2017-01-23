@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014. Rustam @Second_Fry Gubaydullin, RAISA Incursions.
+ * Copyright (c) 2017. Rustam @Second_Fry Gubaydullin.
  *
  * This file is part of EVE Fleet Queue.
  *
@@ -18,12 +18,14 @@
  */
 
 module.exports = {
-  index: function (req, res) {
-    console.log(req);
-    return res.send();
-  },
-  justBody: function (req, res) {
-    console.log(req.body);
-    return res.send();
+
+  getNotEnded: function(res) {
+    return FleetHistory
+      .findOneByIsEnded('false')
+      .then(function(fleetHistoryLine) {
+        return fleetHistoryLine;
+      })
+      .catch(res.serverError(err));
   }
+
 };

@@ -112,7 +112,7 @@ function getQueue() {
     if (data.result == 'ok') {
       queueSort(data.data);
       $.each(data.data, function(k, v){
-        socket.get('/pilot', {id: v.pilotID}, function(pilot){
+        io.socket.get('/pilot', {id: v.pilotID}, function(pilot){
           addQueueLine(v, pilot);
           addToObject(v);
         });

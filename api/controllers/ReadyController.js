@@ -22,22 +22,33 @@ var ReadyController = {
   ask: function (req, res) {
     if (req.body.pilotName) {
       sails.io.sockets.in(req.body.pilotName).emit('ready-ask');
-      res.send({action: 'ready-ask', result: 'ok'})
-    } else res.send({action: 'ready-ask', result: 'fail'})
+      return res.send({action: 'ready-ask', result: 'ok'})
+    } else {
+      return res.send({action: 'ready-ask', result: 'fail'})
+    }
   },
 
   check: function (req, res) {
+    var
+      query = {
+        pilotID: req.session.pilotID
+      },
+      data = {
+        ready: "yes"
+      };
     sails.io.sockets.in('admin').emit('ready-check', {pilotName: req.session.pilotName});
-    Queue.update({
-      pilotID: req.session.pilotID
-    }, {
-      ready: "yes"
-    }).exec(function (err, queueLine) {
-      if (err) res.serverError(err); else if (queueLine) res.send({
-        action: 'ready-check',
-        result: 'ok'
-      }); else res.send({action: 'ready-check', result: 'fail'})
-    });
+    return Queue
+      .update(query, data)
+      .then(
+        function(queueLine) {
+          if (!queueLine) {
+            throw new ErrorService.NoSuchLineError('ready-check');
+          }
+
+          return res.send({action: 'ready-check', result: 'ok'});
+        }
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
   }
 
 };

@@ -30,13 +30,13 @@ module.exports = {
   }
 };
 ```
-### Пример config/levelList.jspn
+### Пример config/levelList.json
 ```json
 {
   "Lenai Chelien": 4
 }
 ```
-### Пример config/banList.jspn
+### Пример config/banList.json
 ```json
 {
   "Lenai": "banned"

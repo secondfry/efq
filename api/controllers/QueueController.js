@@ -20,43 +20,62 @@
 var QueueController = {
 
   checkType: function (req, res) {
-    Queue.findOneByPilotID(req.session.pilotID).exec(function (err, queueLine) {
-      if (err) res.serverError(err); else if (queueLine) {
-        req.session.queueType = queueLine.queueType;
-        req.session.category = queueLine.category;
-        res.send({
-          action: 'queue-checktype',
-          result: 'ok',
-          queueType: queueLine.queueType,
-          category: queueLine.category
-        })
-      } else res.send({action: 'queue-checktype', result: 'fail'})
-    })
+    return Queue
+      .findOneByPilotID(req.session.pilotID)
+      .then(
+        function(queueLine) {
+          if (!queueLine) {
+            throw new ErrorService.NoSuchLineError('queue-checktype');
+          }
+
+          req.session.queueType = queueLine.queueType;
+          req.session.category = queueLine.category;
+          return res.send({
+            action: 'queue-checktype',
+            result: 'ok',
+            queueType: queueLine.queueType,
+            category: queueLine.category
+          });
+        }
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
   },
 
   checkPosition: function (req, res) {
-    Queue.find({
+    var query = {
       queueType: req.session.queueType,
       category: req.session.category
-    }).exec(function (err, queue) {
-      if (err) res.serverError(err); else if (queue) {
-        var i = 0, queueLength = queue.length, isFound = false;
-        while (i < queueLength) {
-          if (queue[i].pilotID == req.session.pilotID) {
-            isFound = true;
-            break;
+    };
+    return Queue
+      .find(query)
+      .then(
+        function(queue) {
+          if (!queue) {
+            throw new ErrorService.NoSuchLineError('queue-checkposition');
           }
-          i++;
+
+          var
+            i = 0,
+            queueLength = queue.length;
+          while (i < queueLength) {
+            if (queue[i].pilotID == req.session.pilotID) {
+              return res.send({action: 'queue-checktype', result: 'ok', position: ++i});
+            }
+            i++;
+          }
+
+          return res.send({action: 'queue-checkposition', result: 'fatal'});
         }
-        if (isFound) res.send({action: 'queue-checktype', result: 'ok', position: i + 1});
-        else res.send({action: 'queue-checkposition', result: 'fatal'})
-      } else res.send({action: 'queue-checkposition', result: 'fail'})
-    })
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
   },
 
   join: function (req, res) {
-    var category, shiptype, queueType, pilotID;
-    shiptype = ItemService.items[req.body.fit.match(/(^[^:]*):/)[1]].name;
+    var
+      shiptype = ItemService.items[req.body.fit.match(/(^[^:]*):/)[1]].name,
+      queueType = req.body.queueType ? req.body.queueType : "queue",
+      pilotID = req.body.pilotID ? req.body.pilotID : req.session.pilotID,
+      category, data;
     switch (shiptype) {
       case 'Vindicator':
         category = 'Close';
@@ -68,17 +87,17 @@ var QueueController = {
       case 'Basilisk':
       case 'Scimitar':
         category = 'Logistics';
-        if (!req.body.logistics || req.body.logistics == 0) return res.send({
-          action: 'queue-join',
-          result: 'fail-logistics'
-        });
+        if (!req.body.logistics || req.body.logistics == 0) {
+          return res.send({
+            action: 'queue-join',
+            result: 'fail-logistics'
+          });
+        }
         break;
       default:
         category = 'Other';
     }
-    req.body.queueType ? queueType = req.body.queueType : queueType = "queue";
-    req.body.pilotID ? pilotID = req.body.pilotID : pilotID = req.session.pilotID;
-    Queue.create({
+    data = {
       pilotID: pilotID,
       queueType: queueType,
       category: category,
@@ -86,68 +105,112 @@ var QueueController = {
       fit: req.body.fit,
       logistics: req.body.logistics,
       ready: 'idk'
-    }).exec(function (err, queueLine) {
-      if (err) res.serverError(err); else if (queueLine) {
-        req.session.queueType = queueLine.queueType;
-        req.session.category = queueLine.category;
-        req.session.shiptype = queueLine.shiptype;
-        req.session.ready = queueLine.ready;
-        sails.io.sockets.in('admin').emit('queue', {action: 'join', queueLine: queueLine});
-        // FIXME PilotHistoryService.add(queueLine, queueLine.queueType);
-        res.send({action: 'queue-join', result: 'ok'})
-      } else res.send({action: 'queue-join', result: 'fail'})
-    });
+    };
+    return Queue
+      .create(data)
+      .then(
+        function(queueLine) {
+          if (!queueLine) {
+            throw new ErrorService.NoSuchLineError('queue-join');
+          }
+
+          req.session.queueType = queueLine.queueType;
+          req.session.category = queueLine.category;
+          req.session.shiptype = queueLine.shiptype;
+          req.session.ready = queueLine.ready;
+          sails.io.sockets.in('admin').emit('queue', {action: 'join', queueLine: queueLine});
+          // FIXME PilotHistoryService.add(queueLine, queueLine.queueType);
+          return res.send({action: 'queue-join', result: 'ok'});
+        }
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
   },
 
   leave: function (req, res) {
-    var pilotID;
-    req.body.pilotID ? pilotID = req.body.pilotID : pilotID = req.session.pilotID;
-    Queue.findOneByPilotID(pilotID).exec(function (err, queueLine) {
-      if (err) res.serverError(err); else if (queueLine) {
-        Queue.destroy({
-          pilotID: pilotID
-        }).exec(function (err) {
-          if (err) res.serverError(err); else {
-            req.session.queueType = null;
-            req.session.category = null;
-            req.session.shiptype = null;
-            req.session.ready = null;
-            sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotID: pilotID, queueLine: queueLine});
-            res.send({action: 'queue-leave', result: 'ok', pilotID: req.session.pilotID})
+    var
+      pilotID = req.body.pilotID ? req.body.pilotID : req.session.pilotID,
+      queueLine, query;
+    queueLine = Queue
+      .findOneByPilotID(pilotID)
+      .then(
+        function(queueLine) {
+          if (!queueLine) {
+            throw new ErrorService.NoSuchLineFatalError('queue-leave');
           }
-        })
-      } else res.send({action: 'queue-leave', result: 'fatal'})
-    })
+
+          return queueLine;
+        }
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
+    query = {
+      pilotID: pilotID
+    };
+    return Queue
+      .destroy(query)
+      .then(function(){
+        req.session.queueType = null;
+        req.session.category = null;
+        req.session.shiptype = null;
+        req.session.ready = null;
+        sails.io.sockets.in('admin').emit('queue', {action: 'leave', pilotID: pilotID, queueLine: queueLine});
+        return res.send({action: 'queue-leave', result: 'ok', pilotID: req.session.pilotID});
+      })
+      .catch(ErrorService.handleErrors.bind(this, req, res));
   },
 
   get: function (req, res) {
-    Queue.find().exec(function (err, queue) {
-      if (err) res.serverError(err); else if (queue) res.send({action: 'queue-get', result: 'ok', data: queue}); else
-        res.send({action: 'queue-get', result: 'fail'})
-    })
+    return Queue
+      .find()
+      .then(
+        function(queue) {
+          if (!queue) {
+            throw new ErrorService.NoSuchLineError('queue-get');
+          }
+
+          return res.send({action: 'queue-get', result: 'ok', data: queue});
+        }
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
   },
 
   update: function (req, res) {
-    Queue.findOneByPilotID(req.body.pilotID).exec(function (err, queueLine) {
-      if (err) res.serverError(err); else if (queueLine) {
-        var queueLine_old = queueLine;
-        Queue.update({
-          pilotID: req.body.pilotID
-        }, {
-          queueType: req.body.queueType
-        }).exec(function (err, queueLine) {
-          if (err) res.serverError(err); else if (queueLine) {
-            sails.io.sockets.in('admin').emit('queue', {
-              action: 'update',
-              pilotID: req.body.pilotID,
-              queueType: req.body.queueType,
-              queueLine: queueLine_old
-            });
-            res.send({action: 'queue-update', result: 'ok'});
-          } else res.send({action: 'queue-update', result: 'fatal'})
-        })
-      } else res.send({action: 'queue-update', result: 'fatal'})
-    })
+    var queueLineOld, query, data;
+    queueLineOld = Queue
+      .findOneByPilotID(req.body.pilotID)
+      .then(
+        function(queueLine) {
+          if (!queueLine) {
+            throw new ErrorService.NoSuchLineFatalError('queue-update');
+          }
+
+          return queueLine;
+        }
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
+    query = {
+      pilotID: req.body.pilotID
+    };
+    data = {
+      queueType: req.body.queueType
+    };
+    return Queue
+      .update(query, data)
+      .then(
+        function(queueLine) {
+          if (!queueLine) {
+            throw new ErrorService.NoSuchLineFatalError('queue-update');
+          }
+
+          sails.io.sockets.in('admin').emit('queue', {
+            action: 'update',
+            pilotID: req.body.pilotID,
+            queueType: req.body.queueType,
+            queueLine: queueLineOld
+          });
+          return res.send({action: 'queue-update', result: 'ok'});
+        }
+      )
+      .catch(ErrorService.handleErrors.bind(this, req, res));
   }
 
 };
