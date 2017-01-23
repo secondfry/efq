@@ -5,6 +5,7 @@
 - Установить все зависимости - `npm install`.
 - Настроить подходящий [adapter](http://sailsjs.org/#!documentation/config.adapters) в файлах config/adapters.js и/или config/local.js.
 - Настроить порт и среду в [config/local.js](http://sailsjs.org/#!documentation/config.local).
+- Записать ФК в config/levelList.json, забанненых пилотов в config/banList.json.
 - Запустить приложение - `sails lift`.
 
 ### Пример config/adapters.js
@@ -28,6 +29,18 @@ module.exports = {
     }
   }
 };
+```
+### Пример config/levelList.jspn
+```json
+{
+  "Lenai Chelien": 4
+}
+```
+### Пример config/banList.jspn
+```json
+{
+  "Lenai": "banned"
+}
 ```
 ## Лицензия
 Продукт распространяется по GNU Affero General Public License v3.

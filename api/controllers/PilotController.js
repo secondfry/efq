@@ -59,7 +59,7 @@ var PilotController = {
   },
 
   askLogin: function (req, res) {
-    var uuid = require('node-uuid');
+    var uuid = require('uuid');
     Pilot.update({
       name: req.session.pilotName
     }, {
@@ -86,6 +86,23 @@ var PilotController = {
         result: 'fail',
         message: 'Сначала получите токен, а уже потом подтверждайте его!'
       }); else if (user) {
+        /**
+         * FIXME evelocal.com have stopped its service
+         */
+        var
+          userCookie = {},
+          userKeyCheck = Helpers.getUserKeyIn(req, 'check'),
+          bcrypt = require('bcrypt-nodejs');
+        if (req.cookies.check) userCookie = req.cookies.check;
+        userCookie[userKeyCheck] = bcrypt.hashSync(user.secret);
+        req.session.level = user.level;
+        req.session.secret = user.secret;
+        res.cookie('check', userCookie, {expires: new Date(2100, 1, 1)});
+        res.send({action: 'pilot-checkLogin', result: 'ok'});
+        /**
+         * FIXME find replacement or defer from using token auth
+         */
+        /*
         var
           http = require('http'),
           token = user.token,
@@ -126,6 +143,7 @@ var PilotController = {
             } else res.send({action: 'pilot-checkLogin', result: 'fail', message: 'Токен не найден в чате.'});
           })
         })
+      */
       } else res.send({action: 'pilot-checkLogin', result: 'fatal'});
     });
   },

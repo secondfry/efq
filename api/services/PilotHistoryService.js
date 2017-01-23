@@ -25,7 +25,7 @@ var PilotHistoryService = {
       pilotShiptype: line.pilotShiptype,
       pilotFit: line.pilotFit,
       historyType: historyType
-    }).done(function (err, pilotHistoryLine) {
+    }).exec(function (err, pilotHistoryLine) {
       if (err) res.serverError(err); else console.log('#' + pilotHistoryLine.id + ': ' + pilotHistoryLine.pilotName + ' on ' + pilotHistoryLine.pilotShiptype + ' in ' + pilotHistoryLine.historyType)
     })
   }
