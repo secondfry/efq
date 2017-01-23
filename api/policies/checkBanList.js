@@ -17,10 +17,10 @@
  * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = function checkBanList (req, res, next) {
+module.exports = function checkBanList(req, res, next) {
   var fs = require('fs');
   var data = JSON.parse(fs.readFileSync('./config/banList.json'));
-  if(data[req.session.pilotName] != "banned") {
+  if (data[req.session.pilotName] != "banned") {
     next()
   }
 };

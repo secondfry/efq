@@ -19,7 +19,7 @@
 
 module.exports = {
 
-  getUserKeyIn: function (req, cookie){
+  getUserKeyIn: function (req, cookie) {
     var bcrypt = require('bcrypt-nodejs');
     if (req.cookies[cookie]) {
       for (key in req.cookies[cookie]) {

@@ -32,8 +32,11 @@ var ReadyController = {
       pilotID: req.session.pilotID
     }, {
       ready: "yes"
-    }).done(function (err, queueLine){
-      if (err) res.serverError(err); else if (queueLine) res.send({action: 'ready-check', result: 'ok'}); else res.send({action: 'ready-check', result: 'fail'})
+    }).exec(function (err, queueLine) {
+      if (err) res.serverError(err); else if (queueLine) res.send({
+        action: 'ready-check',
+        result: 'ok'
+      }); else res.send({action: 'ready-check', result: 'fail'})
     });
   }
 

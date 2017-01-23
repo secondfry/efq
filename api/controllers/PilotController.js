@@ -19,8 +19,8 @@
 
 var PilotController = {
 
-  check: function(req, res) {
-    Pilot.findOneByEveID(req.session.eveID).done(function(err, pilot){
+  check: function (req, res) {
+    Pilot.findOneByEveID(req.session.eveID).exec(function (err, pilot) {
       if (err) res.serverError(err); else if (pilot) {
         req.session.pilotID = pilot.id;
         res.send({action: 'pilot-check', result: 'ok'})
@@ -29,7 +29,7 @@ var PilotController = {
   },
 
   add: function (req, res) {
-    var uuid = require('node-uuid');
+    var uuid = require('uuid');
     var fs = require('fs');
     var level;
     var data = JSON.parse(fs.readFileSync('./config/levelList.json'));
@@ -42,7 +42,7 @@ var PilotController = {
       token: 'not-a-token',
       secret: uuid.v4(),
       level: level
-    }).done(function(err, pilot) {
+    }).exec(function (err, pilot) {
       if (err) res.serverError(err); else if (pilot) {
         req.session.pilotID = pilot.id;
         res.send({action: 'pilot-add', result: 'ok'})
@@ -50,21 +50,21 @@ var PilotController = {
     });
   },
 
-  checkLevel: function(req, res) {
+  checkLevel: function (req, res) {
     var fs = require('fs');
     var data = JSON.parse(fs.readFileSync('./config/levelList.json'));
     var level = data[req.session.pilotName];
-    if(level > 0) res.send({action: 'pilot-checkLevel', result: 'ok', level: level});
+    if (level > 0) res.send({action: 'pilot-checkLevel', result: 'ok', level: level});
     else res.send({action: 'pilot-checkLevel', result: 'fail', level: 0})
   },
 
-  askLogin: function(req, res) {
+  askLogin: function (req, res) {
     var uuid = require('node-uuid');
     Pilot.update({
       name: req.session.pilotName
     }, {
       token: uuid.v4()
-    }).done(function(err, user){
+    }).exec(function (err, user) {
       if (err) res.serverError(err); else if (user) {
         var
           bcrypt = require('bcrypt-nodejs'),
@@ -79,11 +79,13 @@ var PilotController = {
     })
   },
 
-  checkLogin: function(req, res) {
-    Pilot.findOneById(req.session.pilotID).done(function(err, user){
-      if (err) res.serverError(err); else
-      if (user.token == 'not-a-token') res.send({action: 'pilot-checkLogin', result: 'fail', message: 'Сначала получите токен, а уже потом подтверждайте его!'}); else
-      if (user) {
+  checkLogin: function (req, res) {
+    Pilot.findOneById(req.session.pilotID).exec(function (err, user) {
+      if (err) res.serverError(err); else if (user.token == 'not-a-token') res.send({
+        action: 'pilot-checkLogin',
+        result: 'fail',
+        message: 'Сначала получите токен, а уже потом подтверждайте его!'
+      }); else if (user) {
         var
           http = require('http'),
           token = user.token,
@@ -93,20 +95,20 @@ var PilotController = {
           host: 'evelocal.com',
           port: 80,
           path: '/RAISA_Shield'
-        }, function(response) {
+        }, function (response) {
           var data = '';
-          response.on('data', function(chunk) {
+          response.on('data', function (chunk) {
             data += chunk;
           });
-          response.on('end', function(){
+          response.on('end', function () {
             var
               matches,
               isAuthDone = false,
               bcrypt = require('bcrypt-nodejs'),
               userKeyAsk = Helpers.getUserKeyIn(req, 'ask');
             regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
-            while((matches = regexp.exec(data)) !== null) {
-              if(token == matches[2] && bcrypt.compareSync(matches[2], req.cookies.ask[userKeyAsk])) {
+            while ((matches = regexp.exec(data)) !== null) {
+              if (token == matches[2] && bcrypt.compareSync(matches[2], req.cookies.ask[userKeyAsk])) {
                 isAuthDone = true;
                 break;
               }
@@ -119,7 +121,7 @@ var PilotController = {
               userCookie[userKeyCheck] = bcrypt.hashSync(secret);
               req.session.level = level;
               req.session.secret = secret;
-              res.cookie('check', userCookie, { expires: new Date(2100, 1, 1) });
+              res.cookie('check', userCookie, {expires: new Date(2100, 1, 1)});
               res.send({action: 'pilot-checkLogin', result: 'ok'});
             } else res.send({action: 'pilot-checkLogin', result: 'fail', message: 'Токен не найден в чате.'});
           })
@@ -136,7 +138,7 @@ var PilotController = {
       id: req.session.pilotID
     }, {
       location: location
-    }).done(function(err, pilot){
+    }).exec(function (err, pilot) {
       if (err) res.serverError(err); else if (pilot) {
         req.session.location = location;
         res.send({action: 'pilot-locate', result: 'ok'})

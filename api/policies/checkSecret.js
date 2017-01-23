@@ -17,9 +17,9 @@
  * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = function checkSecret (req, res, next) {
+module.exports = function checkSecret(req, res, next) {
   if (req.session.level == undefined && req.cookies && req.cookies.check) {
-    Pilot.findOneByEveID(req.session.eveID).done(function(err, user){
+    Pilot.findOneByEveID(req.session.eveID).done(function (err, user) {
       if (err) res.serverError(err); else if (user) {
         var
           bcrypt = require('bcrypt-nodejs'),

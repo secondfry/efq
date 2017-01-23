@@ -17,7 +17,7 @@
  * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = function setSessionPilot (req, res, next) {
+module.exports = function setSessionPilot(req, res, next) {
   if (req.session.isSet == undefined || req.session.isSet == false) {
     if (req.headers.eve_trusted == "Yes") {
       typeof req.headers.eve_stationname == 'undefined' ?

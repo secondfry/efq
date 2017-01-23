@@ -17,7 +17,7 @@
  * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-module.exports = function setSessionPilot (req, res, next) {
+module.exports = function setSessionPilot(req, res, next) {
   if (!req.session || !req.session.pilotID) {
     res.send({action: 'checkPilotID', result: 'fail'})
   } else next()

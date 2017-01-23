@@ -52,7 +52,7 @@ module.exports = {
       required: true,
       decimal: true
     }
-    
+
   }
 
 };

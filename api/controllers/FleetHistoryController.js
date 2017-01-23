@@ -20,7 +20,7 @@
 var FleetHistoryController = {
 
   check: function (req, res) {
-    FleetHistory.findOneByIsEnded('false').done(function(err, fleetHistoryLine){
+    FleetHistory.findOneByIsEnded('false').exec(function (err, fleetHistoryLine) {
       if (err) res.serverError(err); else if (fleetHistoryLine) {
         res.send({message: 'There is active fleet.', data: fleetHistoryLine})
       } else {
@@ -34,22 +34,22 @@ var FleetHistoryController = {
       FCName: req.body.FCName
     }, {
       isEnded: true
-    }).done(function(err, fleetHistoryLine) {
+    }).exec(function (err, fleetHistoryLine) {
       if (err) res.serverError(err); else res.send({message: 'Fleet ended.', data: fleetHistoryLine})
     });
   },
 
   start: function (req, res) {
-    FleetHistory.findOneByIsEnded('false').done(function(err, fleetHistoryLine){
+    FleetHistory.findOneByIsEnded('false').exec(function (err, fleetHistoryLine) {
       if (err)
         console.log(err);
-      if(fleetHistoryLine) {
+      if (fleetHistoryLine) {
         res.send({message: 'You cant start fleet - there is one active already.', data: fleetHistoryLine})
       } else {
         FleetHistory.create({
           FCName: req.body.FCName,
           isEnded: 'false'
-        }).done(function(err, fleetHistoryLine){
+        }).exec(function (err, fleetHistoryLine) {
           if (err) res.serverError(err); else res.send({message: 'Fleet started.', data: fleetHistoryLine})
         })
       }

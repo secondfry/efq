@@ -24,10 +24,10 @@ function updateCookie(req, res, cookie, expires) {
   userCookie[bcrypt.hashSync(req.session.pilotName)] = bcrypt.hashSync(req.cookies[cookie]);
   req.cookies[cookie] = userCookie;
   if (expires) res.cookie(cookie, userCookie);
-  else res.cookie(cookie, userCookie, { expires: new Date(2100, 1, 1) });
+  else res.cookie(cookie, userCookie, {expires: new Date(2100, 1, 1)});
 }
 
-module.exports = function update (req, res, next) {
+module.exports = function update(req, res, next) {
   if (req.cookies) {
     if (typeof req.cookies.check == 'string') updateCookie(req, res, 'check', false);
     if (typeof req.cookies.ask == 'string') updateCookie(req, res, 'ask', true);
