@@ -1,31 +1,30 @@
 /**
- * Session
- * 
- * Sails session integration leans heavily on the great work already done by Express, but also unifies 
- * Socket.io with the Connect session store. It uses Connect's cookie parser to normalize configuration
- * differences between Express and Socket.io and hooks into Sails' middleware interpreter to allow you
- * to access and auto-save to `req.session` with Socket.io the same way you would with Express.
- *
- * For more information on configuring the session, check out:
- * http://sailsjs.org/#documentation
+ * Session Configuration (sails.config.session)
+ * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.session.html
  */
 
 module.exports.session = {
 
-  // Session secret is automatically generated when your new app is created
-  // Replace at your own risk in production-- you will invalidate the cookies of your users,
-  // forcing them to log in again. 
-  secret: '962ca53fb7ad06a5dcf47b8692001956'
+  /**
+   * Invalidates user cookies
+   */
+  secret: '962ca53fb7ad06a5dcf47b8692001956',
 
+  /**
+   * Cookie TTL
+   */
+  // cookie: {
+  //   maxAge: 24 * 60 * 60 * 1000
+  // },
 
-  // In production, uncomment the following lines to set up a shared redis session store
-  // that can be shared across multiple Sails.js servers
+  /**
+   * TODO migrate to redis
+   * Requires connect-redis (https://www.npmjs.com/package/connect-redis)
+   */
   // adapter: 'redis',
-  //
-  // The following values are optional, if no options are set a redis instance running
-  // on localhost is expected.
-  // Read more about options at: https://github.com/visionmedia/connect-redis
-  //
+  /**
+   * If localhost, remove. Else specify.
+   */
   // host: 'localhost',
   // port: 6379,
   // ttl: <redis session TTL in seconds>,
@@ -33,24 +32,23 @@ module.exports.session = {
   // pass: <redis auth password>
   // prefix: 'sess:'
 
-
-  // Uncomment the following lines to use your Mongo adapter as a session store
+  /**
+   * TODO migrate to mongoDB
+   * Requires connect-mongo (https://www.npmjs.com/package/connect-mongo)
+   */
   // adapter: 'mongo',
-  //
-  // host: 'localhost',
-  // port: 27017,
-  // db: 'sails',
+  // url: 'mongodb://user:password@localhost:27017/dbname',
+  /**
+   * Optional values
+   * https://github.com/kcbanner/connect-mongo
+   * http://bit.ly/mongooptions
+   */
   // collection: 'sessions',
-  //
-  // Optional Values:
-  //
-  // # Note: url will override other connection settings
-  // url: 'mongodb://user:pass@host:port/database/collection',
-  //
-  // username: '',
-  // password: '',
-  // auto_reconnect: false,
-  // ssl: false,
-  // stringify: true
+  // stringify: true,
+  // mongoOptions: {
+  //   server: {
+  //     ssl: true
+  //   }
+  // }
 
 };

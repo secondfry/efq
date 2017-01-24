@@ -3,14 +3,14 @@
 ## Установка
 - Установить nodeJS.
 - Установить все зависимости - `npm install`.
-- Настроить подходящий [adapter](http://sailsjs.org/#!documentation/config.adapters) в файлах config/adapters.js и/или config/local.js.
+- Настроить подходящий [adapter](http://sailsjs.org/#!documentation/config.adapters) в файлах config/connections.js и/или config/local.js.
 - Настроить порт и среду в [config/local.js](http://sailsjs.org/#!documentation/config.local).
 - Записать ФК в config/levelList.json, забанненых пилотов в config/banList.json.
 - Запустить приложение - `sails lift`.
 
-### Пример config/adapters.js
+### Пример config/connections.js
 ```js
-module.exports.adapters = {
+module.exports.connections = {
   'default': 'supermysql'
 };
 ```

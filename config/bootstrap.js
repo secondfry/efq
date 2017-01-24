@@ -1,33 +1,42 @@
 /**
- * Bootstrap
- *
- * An asynchronous boostrap function that runs before your Sails app gets lifted.
- * This gives you an opportunity to set up your data model, run jobs, or perform some special logic.
- *
- * For more information on bootstrapping your app, check out:
- * http://sailsjs.org/#documentation
+ * Bootstrap (sails.config.bootstrap)
+ * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
 module.exports.bootstrap = function (cb) {
 
   /**
    * Проверяет наличие файла и, если его нет, создает пустой JSON
+   * FIXME move config to mongoDB
    * @param filepath Путь к файлу
-   * @param comment Комментарий внутри
    */
   function checkCreateJSON(filepath) {
     var fs = require('fs');
-    fs.exists(filepath, function(exists) {
-      if (!exists) fs.writeFile(filepath, '{}', function(err) {
-        if (err) sails.log.error(err); else sails.log.info('Created ' + filepath + '.');
+    Promise.resolve(
+      fs.open(filepath, 'r', (err, fd) => {
+        if (err) {
+          throw err;
+        }
+
+        return fd;
+      })
+    )
+      .catch((err) => {
+        if (err.code == "ENOENT") {
+          fs
+            .writeFile(filepath, '{}')
+            .then(() => {
+              sails.log.info('Created ' + filepath + '.');
+            })
+            .catch((err) => {
+              sails.log.error(err);
+            })
+        }
       });
-    });
   }
 
   checkCreateJSON('config/banList.json'); // "%Имя персонажа%": "banned"
   checkCreateJSON('config/levelList.json'); // "%Имя персонажа%": %Уровень доступа%
 
-  // It's very important to trigger this callack method when you are finished 
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   cb();
 };

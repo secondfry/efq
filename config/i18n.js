@@ -1,17 +1,20 @@
 /**
- * Internationalization / Localization Settings
- *
- * If your app will touch people from all over the world, i18n (or internationalization) 
- * may be an important part of your international strategy.
- *
- *
- * For more information, check out:
- * http://sailsjs.org/#documentation
+ * Internationalization / Localization Settings (sails.config.i18n)
+ * http://sailsjs.org/#!/documentation/concepts/Internationalization
+ * https://github.com/mashpie/i18n-node#list-of-configuration-options
  */
 
 module.exports.i18n = {
 
-  // Which locales are supported?
-  locales: ['en', 'es', 'fr', 'de']
-    
+  // TODO add ru locale
+  locales: ['en'],
+  // defaultLocale: 'en',
+
+  /**
+   * Update locale files on request with 'Accept-Language' header
+   */
+  // updateFiles: false,
+
+  // localesDirectory: '/config/locales'
+
 };
