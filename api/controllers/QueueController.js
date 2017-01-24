@@ -1,20 +1,23 @@
 /*
- * Copyright (c) 2014. Rustam @Second_Fry Gubaydullin, RAISA Incursions.
+ * Copyright (c) 2014 – 2017. Rustam @Second_Fry Gubaydullin.
  *
- * This file is part of EVE Fleet Queue.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * EVE Fleet Queue is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- * EVE Fleet Queue is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var QueueController = {
@@ -23,7 +26,7 @@ var QueueController = {
     return Queue
       .findOneByPilotID(req.session.pilotID)
       .then(
-        function(queueLine) {
+        function (queueLine) {
           if (!queueLine) {
             throw new ErrorService.NoSuchLineError('queue-checktype');
           }
@@ -49,7 +52,7 @@ var QueueController = {
     return Queue
       .find(query)
       .then(
-        function(queue) {
+        function (queue) {
           if (!queue) {
             throw new ErrorService.NoSuchLineError('queue-checkposition');
           }
@@ -109,7 +112,7 @@ var QueueController = {
     return Queue
       .create(data)
       .then(
-        function(queueLine) {
+        function (queueLine) {
           if (!queueLine) {
             throw new ErrorService.NoSuchLineError('queue-join');
           }
@@ -133,7 +136,7 @@ var QueueController = {
     queueLine = Queue
       .findOneByPilotID(pilotID)
       .then(
-        function(queueLine) {
+        function (queueLine) {
           if (!queueLine) {
             throw new ErrorService.NoSuchLineFatalError('queue-leave');
           }
@@ -147,7 +150,7 @@ var QueueController = {
     };
     return Queue
       .destroy(query)
-      .then(function(){
+      .then(function () {
         req.session.queueType = null;
         req.session.category = null;
         req.session.shiptype = null;
@@ -162,7 +165,7 @@ var QueueController = {
     return Queue
       .find()
       .then(
-        function(queue) {
+        function (queue) {
           if (!queue) {
             throw new ErrorService.NoSuchLineError('queue-get');
           }
@@ -178,7 +181,7 @@ var QueueController = {
     queueLineOld = Queue
       .findOneByPilotID(req.body.pilotID)
       .then(
-        function(queueLine) {
+        function (queueLine) {
           if (!queueLine) {
             throw new ErrorService.NoSuchLineFatalError('queue-update');
           }
@@ -196,7 +199,7 @@ var QueueController = {
     return Queue
       .update(query, data)
       .then(
-        function(queueLine) {
+        function (queueLine) {
           if (!queueLine) {
             throw new ErrorService.NoSuchLineFatalError('queue-update');
           }

@@ -1,20 +1,23 @@
 /*
- * Copyright (c) 2014. Rustam @Second_Fry Gubaydullin, RAISA Incursions.
+ * Copyright (c) 2014 – 2017. Rustam @Second_Fry Gubaydullin.
  *
- * This file is part of EVE Fleet Queue.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * EVE Fleet Queue is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- * EVE Fleet Queue is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with EVE Fleet Queue.  If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var PilotController = {
@@ -23,7 +26,7 @@ var PilotController = {
     return Pilot
       .findOneByEveID(req.session.eveID)
       .then(
-        function(pilot) {
+        function (pilot) {
           if (!pilot) {
             throw new ErrorService.NoSuchLineError('pilot-check');
           }
@@ -52,7 +55,7 @@ var PilotController = {
     return Pilot
       .create(data)
       .then(
-        function(pilot) {
+        function (pilot) {
           if (!pilot) {
             throw new ErrorService.NoSuchLineFatalError('pilot-add');
           }
@@ -89,7 +92,7 @@ var PilotController = {
     return Pilot
       .update(query, data)
       .then(
-        function(pilot) {
+        function (pilot) {
           if (!pilot) {
             throw new ErrorService.NoSuchLineFatalError('pilot-askLogin');
           }
@@ -111,7 +114,7 @@ var PilotController = {
     return Pilot
       .findOneById(req.session.pilotID)
       .then(
-        function(pilot) {
+        function (pilot) {
           if (!pilot) {
             throw new ErrorService.NoSuchLineFatalError('pilot-checkLogin');
           }
@@ -137,47 +140,47 @@ var PilotController = {
            * FIXME find replacement or defer from using token auth
            */
           /*
-          var
-            http = require('http'),
-            token = user.token,
-            secret = user.secret,
-            level = user.level;
-          http.get({
-            host: 'evelocal.com',
-            port: 80,
-            path: '/RAISA_Shield'
-          }, function (response) {
-            var data = '';
-            response.on('data', function (chunk) {
-              data += chunk;
-            });
-            response.on('end', function () {
-              var
-                matches,
-                isAuthDone = false,
-                bcrypt = require('bcrypt-nodejs'),
-                userKeyAsk = Helpers.getUserKeyIn(req, 'ask');
-              regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
-              while ((matches = regexp.exec(data)) !== null) {
-                if (token == matches[2] && bcrypt.compareSync(matches[2], req.cookies.ask[userKeyAsk])) {
-                  isAuthDone = true;
-                  break;
-                }
-              }
-              if (isAuthDone == true) {
-                var
-                  userCookie = {},
-                  userKeyCheck = Helpers.getUserKeyIn(req, 'check');
-                if (req.cookies.check) userCookie = req.cookies.check;
-                userCookie[userKeyCheck] = bcrypt.hashSync(secret);
-                req.session.level = level;
-                req.session.secret = secret;
-                res.cookie('check', userCookie, {expires: new Date(2100, 1, 1)});
-                res.send({action: 'pilot-checkLogin', result: 'ok'});
-              } else res.send({action: 'pilot-checkLogin', result: 'fail', message: 'Токен не найден в чате.'});
-            })
-          })
-        */
+           var
+           http = require('http'),
+           token = user.token,
+           secret = user.secret,
+           level = user.level;
+           http.get({
+           host: 'evelocal.com',
+           port: 80,
+           path: '/RAISA_Shield'
+           }, function (response) {
+           var data = '';
+           response.on('data', function (chunk) {
+           data += chunk;
+           });
+           response.on('end', function () {
+           var
+           matches,
+           isAuthDone = false,
+           bcrypt = require('bcrypt-nodejs'),
+           userKeyAsk = Helpers.getUserKeyIn(req, 'ask');
+           regexp = /<a href="\/RAISA_Shield\/p\/[^>]*>([^<]*)<\/a>&gt; ([\w\0]{8}-[\w\0]{4}-[\w\0]{4}-[\w\0]{4}-[\w\0]{12})/g;
+           while ((matches = regexp.exec(data)) !== null) {
+           if (token == matches[2] && bcrypt.compareSync(matches[2], req.cookies.ask[userKeyAsk])) {
+           isAuthDone = true;
+           break;
+           }
+           }
+           if (isAuthDone == true) {
+           var
+           userCookie = {},
+           userKeyCheck = Helpers.getUserKeyIn(req, 'check');
+           if (req.cookies.check) userCookie = req.cookies.check;
+           userCookie[userKeyCheck] = bcrypt.hashSync(secret);
+           req.session.level = level;
+           req.session.secret = secret;
+           res.cookie('check', userCookie, {expires: new Date(2100, 1, 1)});
+           res.send({action: 'pilot-checkLogin', result: 'ok'});
+           } else res.send({action: 'pilot-checkLogin', result: 'fail', message: 'Токен не найден в чате.'});
+           })
+           })
+           */
         }
       )
       .catch(ErrorService.handleErrors.bind(this, req, res));
@@ -186,7 +189,7 @@ var PilotController = {
   locate: function (req, res) {
     var
       location = typeof req.headers.eve_stationname == 'undefined' ?
-        req.headers.eve_solarsystemname + ' - ' + req.headers.eve_constellationname + ' - ' + req.headers.eve_regionname :
+      req.headers.eve_solarsystemname + ' - ' + req.headers.eve_constellationname + ' - ' + req.headers.eve_regionname :
         req.headers.eve_stationname,
       query = {
         id: req.session.pilotID
@@ -197,7 +200,7 @@ var PilotController = {
     return Pilot
       .update(query, data)
       .then(
-        function(pilot) {
+        function (pilot) {
           if (!pilot) {
             throw new ErrorService.NoSuchLineError('pilot-locate');
           }
