@@ -1,0 +1,73 @@
+/*!
+ * Second_Fry's Bootstrap micromods
+ * Copyright (c) 2017. Rustam @Second_Fry Gubaydullin.
+ * Licensed under MIT (https://opensource.org/licenses/MIT)
+ */
+
+$enable-rounded: true !default;
+$enable-shadows: true; // false !default;
+$enable-gradients: true; // false !default;
+$enable-transitions: true !default;
+$enable-hover-media-query: true; // false !default;
+$enable-grid-classes: true !default;
+$enable-print-styles: true !default;
+
+@import "bootstrap/bootstrap";
+@import "bootstrap/glyphicons";
+
+@mixin button-outline-variant-mine($color) {
+    color: #eee;
+    background-image: none;
+    background-color: #000;
+    border-color: $color;
+
+    &:focus,
+    &.focus,
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+        color: #fff;
+        background-color: rgba(red($color), green($color), blue($color), 0.25);
+        border-color: $color;
+    }
+    @include hover {
+        color: #fff;
+        background-color: rgba(red($color), green($color), blue($color), 0.25);
+        border-color: $color;
+    }
+
+    &.disabled,
+    &:disabled {
+        &:focus,
+        &.focus {
+            border-color: darken($color, 20%);
+        }
+        @include hover {
+            border-color: darken($color, 20%);
+        }
+    }
+}
+
+.btn-mine-primary {
+    @include button-outline-variant-mine($brand-primary);
+}
+
+.btn-mine-secondary {
+    @include button-outline-variant-mine($gray-lighter);
+}
+
+.btn-mine-success {
+    @include button-outline-variant-mine($brand-success);
+}
+
+.btn-mine-info {
+    @include button-outline-variant-mine($brand-info);
+}
+
+.btn-mine-warning {
+    @include button-outline-variant-mine($brand-warning);
+}
+
+.btn-mine-danger {
+    @include button-outline-variant-mine($brand-danger);
+}
