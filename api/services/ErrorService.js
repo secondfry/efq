@@ -48,12 +48,14 @@ function subError(nameProperty, defaultMessage) {
 var
   NoSuchLineError = subError('NoSuchLineError', 'Error: No such line'),
   NoSuchLineFatalError = subError('NoSuchLineFatalError', 'Fatal error: No such line'),
-  NotTokenError = subError('NotTokenError', 'Error: Not a token');
+  NotTokenError = subError('NotTokenError', 'Error: Not a token'),
+  DBError = subError('DBError', 'Error: DB error');
 
 module.exports = {
   NoSuchLineError: NoSuchLineError,
   NoSuchLineFatalError: NoSuchLineFatalError,
   NotTokenError: NotTokenError,
+  DBError: DBError,
   handleErrors: function (req, res, err) {
     if (err instanceof NoSuchLineError) {
       return res.send({action: err.action, result: 'fail'});
