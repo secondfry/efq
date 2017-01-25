@@ -14,8 +14,7 @@ module.exports.connections = {
 
   localMongo: {
     adapter: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
+    url: process.env.MONGO_URL
   },
 
 };

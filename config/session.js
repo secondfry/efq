@@ -33,7 +33,7 @@ module.exports.session = {
   // prefix: 'sess:'
 
   adapter: 'mongo',
-  url: 'mongodb://localhost:27017/session',
+  url: process.env.MONGO_SESSION_URL,
   /**
    * Optional values
    * https://github.com/kcbanner/connect-mongo
