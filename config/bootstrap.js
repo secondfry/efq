@@ -12,15 +12,15 @@ module.exports.bootstrap = function (cb) {
    */
   function checkCreateJSON(filepath) {
     var fs = require('fs');
-    Promise.resolve(
+    (new Promise((res, rej) => {
       fs.open(filepath, 'r', (err, fd) => {
         if (err) {
-          throw err;
+          rej(err);
         }
 
-        return fd;
+        return res(fd);
       })
-    )
+    }))
       .catch((err) => {
         if (err.code == "ENOENT") {
           fs
