@@ -12,17 +12,10 @@ module.exports.connections = {
     adapter: 'sails-disk'
   },
 
-  /**
-   * TODO move to mongoDB
-   * npm install sails-mongo
-   */
-  // someMongodbServer: {
-  //   adapter: 'sails-mongo',
-  //   host: 'localhost',
-  //   port: 27017,
-  //   user: 'username', //optional
-  //   password: 'password', //optional
-  //   database: 'your_mongo_db_name_here' //optional
-  // },
+  localMongo: {
+    adapter: 'sails-mongo',
+    host: 'localhost',
+    port: 27017,
+  },
 
 };
