@@ -1,29 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title><%- title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <%- partial('partials/styles') %>
-  </head>
-  <body>
-    <header id="header">
-      <h1 class="header_inline">RAISA</h1>
-      <nav class="header_inline" id="header_nav">
-        <!--<a href="">Очередь во флот</a>-->
-        <!--<a href="">Фиты кораблей</a>-->
-        <!--<a href="">Данные о пилоте</a>-->
-        <a id="login_ask" href="javascript:void(0)">Запросить токен</a>
-        <a id="login_check" href="javascript:void(0)">Подтвердить токен</a>
-      </nav>
-      <div class="header_inline" id="pilot_status">Ваш статус недоступен.</div>
-    </header>
-    <div id="main">
-      <%- body %>
-    </div>
-    <footer id="footer">
-      <p>Copyright &copy; 2014 – 2017, Rustam @Second_Fry Gubaydullin. MIT License. <a href="https://github.com/secondfry/efq">Source</a>.</p>
-    </footer>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title><%- title %></title>
+  <meta name="description" content="<?=$this->e($description)?>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <%- partial('partials/scripts') %>
-  </body>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <%- partial('partials/styles') %>
+</head>
+<body id="body">
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<header class="navbar navbar-inverse navbar-toggleable-md">
+  <nav class="container">
+    <div class="d-flex justify-content-between hidden-lg-up">
+      <a class="navbar-brand" href="/">EVE Fleet Queue</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="bd-main-nav">
+      <ul class="nav navbar-nav mr-auto">
+        <%
+          var links = [
+            {url: '/', name: 'EVE Fleet Queue'},
+            {url: '/fleet', name: 'Fleet'}
+          ];
+          _.each(links, function(link){
+        %>
+        <li class="nav-item<% if (req.path == link.url) { %> active<% }%>">
+          <a class="nav-item nav-link " href="<%- link.url %>"><%- link.name %></a>
+        </li>
+        <% }) %>
+      </ul>
+      <% if (!req.session.characterID) { %>
+      <img src="/images/eve_sso.png" alt="EVE Online SSO" class="navbar-text" id="eve_sso" />
+      <% } %>
+    </div>
+  </nav>
+</header>
+
+<%- body %>
+
+<footer id="footer">
+  <div class="container">
+    <p>
+      Copyright &copy; 2014 – 2017. Rustam @Second_Fry Gubaydullin.
+      <a href="https://github.com/secondfry/efq">Source code</a> /
+      <a href="https://raw.githubusercontent.com/secondfry/efq/master/LICENSE">MIT License</a><br>
+      Credits for idea and initial testing to RAISA Shield, Zwo Zateki.
+    </p>
+  </div>
+</footer>
+
+<%- partial('partials/scripts') %>
+</body>
 </html>

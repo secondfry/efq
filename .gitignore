@@ -6,8 +6,12 @@ config/levelList.json
 # Dependencies
 node_modules
 bower_components
-# Sails.js / Waterline / Grunt
 
+# Sass
+.sass-cache
+
+# Sails.js / Waterline / Grunt
+views/partials/*
 .tmp
 dump.rdb
 

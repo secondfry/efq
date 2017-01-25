@@ -5,8 +5,9 @@
 
 module.exports.routes = {
   '/': {
-    view: 'inside/index'
-  }
+    view: 'welcome'
+  },
+  '/sso': 'LoginController.performAuth'
 
   /**
    * '%method% %route%': '%controller%.%method%'

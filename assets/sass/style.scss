@@ -1,0 +1,35 @@
+/*!
+ * Second_Fry's stylesheets
+ * Copyright (c) 2017. Rustam @Second_Fry Gubaydullin.
+ * Licensed under MIT (https://opensource.org/licenses/MIT)
+ */
+// Core variables and mixins
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+
+$gray-darkest: darken($gray-dark, 5);
+
+html {
+  background: $gray-darkest;
+}
+#body {
+
+}
+
+#main {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+#feature-list {
+  .feature {
+    font-size: 1em;
+    margin-bottom: 0;
+  }
+}
+
+#footer {
+  background: $gray-darkest;
+  padding: 1rem 0 0 0;
+  font-size: 0.9em;
+}

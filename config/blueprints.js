@@ -41,7 +41,7 @@ module.exports.blueprints = {
   /**
    * /boat/find -> /api/boat/find
    */
-  // prefix: '/api',
+  prefix: '/api',
 
   /**
    * /boat/:id -> /api/rest/boat/:id
