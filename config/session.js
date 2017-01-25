@@ -32,12 +32,8 @@ module.exports.session = {
   // pass: <redis auth password>
   // prefix: 'sess:'
 
-  /**
-   * TODO migrate to mongoDB
-   * Requires connect-mongo (https://www.npmjs.com/package/connect-mongo)
-   */
-  // adapter: 'mongo',
-  // url: 'mongodb://user:password@localhost:27017/dbname',
+  adapter: 'mongo',
+  url: 'mongodb://localhost:27017/session',
   /**
    * Optional values
    * https://github.com/kcbanner/connect-mongo

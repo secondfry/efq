@@ -8,7 +8,7 @@ module.exports.models = {
   /**
    * connection @ config/connections.js
    */
-  // connection: 'localDiskDb',
+  connection: 'localMongo',
 
   /**
    * Migration strategy: safe (production default), alter (development default), drop
