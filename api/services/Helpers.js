@@ -25,7 +25,7 @@ module.exports = {
   getUserKeyIn: function (req, cookie) {
     var bcrypt = require('bcrypt-nodejs');
     if (req.cookies[cookie]) {
-      for (key in req.cookies[cookie]) {
+      for (var key in req.cookies[cookie]) {
         if (bcrypt.compareSync(req.session.pilotName, key)) {
           return key;
         }

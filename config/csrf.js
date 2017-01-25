@@ -5,4 +5,4 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.csrf.html
  */
 
-// module.exports.csrf = false;
+module.exports.csrf = true;
