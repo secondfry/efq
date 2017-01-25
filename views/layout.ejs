@@ -27,7 +27,7 @@
       </button>
     </div>
     <div class="collapse navbar-collapse" id="bd-main-nav">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav mr-auto">
         <%
           var links = [
             {url: '/', name: 'EVE Fleet Queue'},
@@ -40,6 +40,9 @@
         </li>
         <% }) %>
       </ul>
+      <% if (!req.session.characterID) { %>
+      <img src="/images/eve_sso.png" alt="EVE Online SSO" class="navbar-text" id="eve_sso" />
+      <% } %>
     </div>
   </nav>
 </header>

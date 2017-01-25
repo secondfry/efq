@@ -20,23 +20,26 @@
  * SOFTWARE.
  */
 
-var _csrf = (()=>{
-  $.get('/csrfToken').then((data)=>{
-    return data._csrf;
-  }).catch(console.log.bind(console));
-})();
+var _csrf = $.get('/csrfToken', (data)=>{
+  return data._csrf;
+});
 
 /**
  * EVE Online SSO
  */
 $(document).on('click', '#eve_sso', function() {
-  var data = {};
-  $.post('/api/login/saveState', data)
-    .then(()=>{});
-  $(this).hide();
-  $('#fit_form').show()
+  $.get('/csrfToken', (data) => {
+    $.post('/api/login/saveState', {state: data._csrf, _csrf: data._csrf});
+    location.href =
+      'https://login.eveonline.com/oauth/authorize?' +
+      $.param({
+        response_type: 'code',
+        redirect_uri: 'https://infinite-inlet-29328.herokuapp.com/sso',
+        client_id: 'f46832e565884fdd95d4529f271cef26',
+        state: data._csrf
+      });
+  });
 });
-
 
 /*-----*//* Стартап *//*-----*/
 /**
