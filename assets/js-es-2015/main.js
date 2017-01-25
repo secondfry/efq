@@ -34,7 +34,8 @@ $(document).on('click', '#eve_sso', function() {
       'https://login.eveonline.com/oauth/authorize?' +
       $.param({
         response_type: 'code',
-        redirect_uri: 'https://infinite-inlet-29328.herokuapp.com/sso',
+        // FIXME move into mongo
+        redirect_uri: 'http://efq.secondfry.org/sso',
         client_id: 'f46832e565884fdd95d4529f271cef26',
         state: data._csrf
       });
