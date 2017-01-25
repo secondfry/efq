@@ -40,14 +40,14 @@ module.exports = {
       };
     return new Promise((resolve, reject) => {
       request
-        .post(token_url, options)
-        .auth(ApplicationService.clientID, ApplicationService.clientKey).body()
-        .on('data', (data) => {
-          return resolve(data);
+        .post(token_url, options, (err, response, body) => {
+          if (err || response.statusCode != 200) {
+            return reject(err);
+          }
+
+          return resolve(body);
         })
-        .on('error', (err) => {
-          return reject(err);
-        });
+        .auth(ApplicationService.clientID, ApplicationService.clientKey);
     })
   },
 
@@ -59,17 +59,20 @@ module.exports = {
   requestVerification: (tokensData) => {
     let
       request = require('request'),
+      options = {
+        json: true
+      },
       verify_url = 'https://login.eveonline.com/oauth/verify';
     return new Promise((resolve, reject) => {
       request
-        .get(verify_url)
-        .auth(null, null, true, tokensData.access_token)
-        .on('data', (data) => {
-          return resolve(_.extend(data, tokensData));
+        .get(verify_url, options, (err, response, body) => {
+          if (err) {
+            return reject(err);
+          }
+
+          return resolve(_.extend(body, tokensData));
         })
-        .on('error', (err) => {
-          return reject(err);
-        })
+        .auth(null, null, true, tokensData.access_token);
     });
   }
 
