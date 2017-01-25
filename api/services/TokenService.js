@@ -43,7 +43,7 @@ module.exports = {
             .update(query, token);
         } else {
           return Token
-            .add(token);
+            .create(token);
         }
       })
   },

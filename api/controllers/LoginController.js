@@ -17,7 +17,7 @@ module.exports = {
     // FIXME only GET should be allowed
     // FIXME check req.session.state == req.body.state
     OAuthService
-      .requestToken(req.body.code)
+      .requestToken(req.query.code)
       .then(OAuthService.requestVerification)
       .then(CharacterService.createIfNotExistsFromSSO)
       .then(TokenService.createOrUpdate)

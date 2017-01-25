@@ -34,17 +34,14 @@ module.exports = {
       required: true
     },
     tokenRefresh: {
-      type: 'string',
-      unique: true,
-      required: true
+      type: 'string'
     },
     expires: {
       type: 'datetime',
       required: true
     },
     scopes: {
-      type: 'string',
-      required: true
+      type: 'string'
     },
     hash: {
       type: 'string',
