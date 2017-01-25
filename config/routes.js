@@ -5,7 +5,7 @@
 
 module.exports.routes = {
   '/': {
-    view: 'inside/index'
+    view: 'welcome'
   }
 
   /**
