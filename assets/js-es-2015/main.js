@@ -20,6 +20,24 @@
  * SOFTWARE.
  */
 
+var _csrf = (()=>{
+  $.get('/csrfToken').then((data)=>{
+    return data._csrf;
+  }).catch(console.log.bind(console));
+})();
+
+/**
+ * EVE Online SSO
+ */
+$(document).on('click', '#eve_sso', function() {
+  var data = {};
+  $.post('/api/login/saveState', data)
+    .then(()=>{});
+  $(this).hide();
+  $('#fit_form').show()
+});
+
+
 /*-----*//* Стартап *//*-----*/
 /**
  * Проверка начилия пилота в базе
