@@ -38,6 +38,11 @@ module.export = {
       .create({
         characterID: data.CharacterID,
         characterName: data.CharacterName
+      })
+      .then((characterLine) => {})
+      .catch((err) => {
+        console.log(err);
+        throw new ErrorService.DBError('Error: Couldn\'t add Character into DB');
       });
   }
 
